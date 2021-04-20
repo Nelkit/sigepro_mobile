@@ -4,6 +4,21 @@ import Colors from './colors';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default {
+  getRandomColor() {
+    var lum = -0.25;
+    var hex = String('#' + Math.random().toString(16).slice(2, 8).toUpperCase()).replace(/[^0-9a-f]/gi, '');
+    if (hex.length < 6) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    var rgb = "#",
+        c, i;
+    for (i = 0; i < 3; i++) {
+        c = parseInt(hex.substr(i * 2, 2), 16);
+        c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+        rgb += ("00" + c).substr(c.length);
+    }
+    return rgb;
+  },
   getDateFromNow(date) {
     var localLocale = moment(date);
     moment.locale('es');
@@ -15,18 +30,6 @@ export default {
     moment.locale('es');
     localLocale.locale(false);
     return localLocale.format('DD-MMMM-YYYY');
-  },
-  getMM(date) {
-    var localLocale = moment(date);
-    moment.locale('es');
-    localLocale.locale(false);
-    return localLocale.format('MMM YY');
-  },
-  getMMYYYY(date) {
-    var localLocale = moment(date);
-    moment.locale('es');
-    localLocale.locale(false);
-    return localLocale.format('MMM YYYY');
   },
   colorByPercentage(liquidado) {
     if (liquidado < 50) {
@@ -48,11 +51,6 @@ export default {
 
     // Convert back to days and return
     return Math.round(differenceMs / ONE_DAY);
-  },
-  fixedTo(number) {
-    var num = number;
-    var n = parseFloat(num).toFixed(2);
-    return n
   },
   async storeData(key, value) {
     try {

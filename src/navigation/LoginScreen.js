@@ -16,10 +16,6 @@ import MaterialButton from '../components/MaterialButton';
 import Api from '../services/api';
 
 class LoginScreen extends React.Component {
-  static navigationOptions = ({navigation, screenProps}) => ({
-    header: null,
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -32,15 +28,6 @@ class LoginScreen extends React.Component {
     };
 
     this.doLogin = this.doLogin.bind(this);
-  }
-
-  async getSetting() {
-    var responseData = await Api.getSetting();
-
-    if (responseData.length > 0) {
-      this.setState({env: responseData[0].env});
-      Helpers.storeData('currentEnv', responseData[0].env);
-    }
   }
 
   async doLogin() {
@@ -66,16 +53,12 @@ class LoginScreen extends React.Component {
     this.setState({disabled: false});
   }
 
-  componentDidMount() {
-    this.getSetting();
-  }
-
   render() {
     return (
       <>
         <StatusBar
-          barStyle="light-content"
-          backgroundColor={Colors.primaryColor}
+          barStyle="dark-content"
+          backgroundColor={Colors.backgroundColor}
         />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.wrapper}>
@@ -83,6 +66,7 @@ class LoginScreen extends React.Component {
               contentInsetAdjustmentBehavior="automatic"
               style={styles.scrollView}>
               <View style={styles.container}>
+
                 <Image
                   style={styles.logo}
                   source={require('../assets/images/logo.png')}
@@ -107,8 +91,8 @@ class LoginScreen extends React.Component {
                   title="Entrar"
                   disabledText="Espere un Momento..."
                   disabled={this.state.disabled}
-                  backgroundColor={Colors.white}
-                  color={Colors.primaryText}
+                  backgroundColor={Colors.primaryColor}
+                  color={Colors.primaryDarkText}
                   onPress={this.doLogin}
                 />
                 {this.state.errorLogin && (
@@ -134,7 +118,7 @@ class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.background,
   },
   scrollView: {
     height: '100%',
@@ -146,12 +130,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   logo: {
-    width: 250,
-    height: 156,
+    width: 133,
+    height: 131,
     marginBottom: 20,
   },
   safeArea: {
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.background,
   },
   formRow: {
     width: '100%',
@@ -160,7 +144,7 @@ const styles = StyleSheet.create({
   messageError: {
     marginTop: 20,
     fontSize: 16,
-    color: 'white',
+    color: 'red',
     textAlign: 'center',
   },
   horizontal: {

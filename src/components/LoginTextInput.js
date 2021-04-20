@@ -8,7 +8,7 @@ export default class LoginTextInput extends Component {
       <TextInput
         style={styles.textInput}
         placeholder={this.props.placeholder}
-        placeholderTextColor={Colors.secondaryDarkText}
+        placeholderTextColor={Colors.secondaryText}
         value={this.props.value}
         autoCapitalize={'none'}
         secureTextEntry={this.props.secureTextEntry}
@@ -23,10 +23,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderRadius: 8,
-    color: Colors.primaryDarkText,
-    backgroundColor: '#0048B5',
+    color: Colors.primaryText,
+    backgroundColor: '#F2F2F2',
     paddingLeft: 10,
     paddingRight: 10,
     fontSize: 18,
+    borderColor: '#ddd',
+    borderWidth: 2,
   },
 });

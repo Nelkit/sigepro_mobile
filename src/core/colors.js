@@ -2,7 +2,7 @@ import {processColor} from 'react-native';
 
 const background = '#E5E5E5';
 
-const primaryColor = '#0066FF';
+const primaryColor = '#502810';
 const secondaryColor = '#005EEC';
 const dangerColor = '#FC6130';
 const logoutColor = '#E74A3B';
@@ -27,48 +27,8 @@ const aprobado = '#FD7E13';
 const excelente = '#F6C23E';
 const sobresaliente = '#1CC88A';
 
-const chartColors = [
-  processColor('#993ae3'),
-  processColor('#c7f85f'),
-  processColor('#af998e'),
-  processColor('#134007'),
-  processColor('#6bcce7'),
-  processColor('#1da26d'),
-  processColor('#5e786e'),
-  processColor('#9dcb92'),
-  processColor('#1e96b0'),
-  processColor('#6560a1'),
-  processColor('#656c7f'),
-  processColor('#4f8bfa'),
-  processColor('#d76053'),
-  processColor('#64eeb6'),
-  processColor('#642dfb'),
-  processColor('#637db5'),
-  processColor('#7d3c05'),
-  processColor('#3bc525'),
-  processColor('#918b6b'),
-  processColor('#124e8b'),
-  processColor('#27f004'),
-  processColor('#827a66'),
-  processColor('#770a7f'),
-  processColor('#a20081'),
-  processColor('#267e08'),
-  processColor('#7ec195'),
-  processColor('#3e5a53'),
-  processColor('#4c1014'),
-  processColor('#0bb6cf'),
-  processColor('#9bbbb7'),
-  processColor('#17ae6d'),
-  processColor('#f655ac'),
-  processColor('#ebb43f'),
-  processColor('#4a3b3c'),
-  processColor('#a9b283'),
-  processColor('#d932d8'),
-  processColor('#a3d894'),
-  processColor('#847743'),
-  processColor('#3eb6fe'),
-  processColor('#af804d'),
-];
+const indicatorButton = '#1F1F1F';
+
 
 module.exports = {
   primaryColor,
@@ -81,7 +41,6 @@ module.exports = {
   secondaryText,
   white,
   accentColor,
-  chartColors,
   background,
   bar1Color,
   bar2Color,
@@ -91,4 +50,5 @@ module.exports = {
   excelente,
   sobresaliente,
   logoutColor,
+  indicatorButton,
 };
