@@ -11,9 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createCompatNavigatorFactory } from '@react-navigation/compat';
 import  React from 'react';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import Colors from './src/core/colors';
 import HomeScreen from './src/navigation/HomeScreen';
 import LoginScreen from './src/navigation/LoginScreen';
 import AuthLoadingScreen from './src/navigation/AuthLoadingScreen';
@@ -23,7 +21,14 @@ const Stack = createStackNavigator()
 function AppStack() {
   return (
     <Stack.Navigator >
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{
+        title:'ORDENES',
+        headerLeft: ()=> null,
+        headerTintColor: Colors.white,
+        headerStyle: {
+          backgroundColor: Colors.primaryColor
+        },
+      }} />
     </Stack.Navigator>
   );
 }

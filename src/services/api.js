@@ -1,21 +1,28 @@
-import axios from 'axios';
-import {urlApi} from '../core/constants';
 
-export default {
-  doLogin(data) {
-    return axios
-      .post(urlApi + '/login/', data)
-      .then(response => {
-        // handle success
-        return response;
-      })
-      .catch(error => {
-        // handle error
-        return error;
-      })
-      .finally(() => {
-        // always executed
-        console.log('complete doLogin()');
-      });
-  },
-};
+const fetchJSON = (url, options = {}) => {
+    return fetch(url, options)
+    .then(response => {
+        if (!response.status === 200 ) {
+
+            throw response.json();
+        }
+
+        if (response.status == 204){
+           return []     
+        }
+
+        if (response.ok){
+            return response.json();
+        }else{
+            return response.text().then(text => {throw new Error(text)})
+        } 
+    })
+    .then(json => {
+        return json;
+    })
+    .catch(error => {
+        throw error;
+    });
+}
+
+export { fetchJSON };

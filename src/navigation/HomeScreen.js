@@ -3,27 +3,65 @@ import {
   View,
   Text,
   SafeAreaView,
-  ScrollView,
+  Dimensions,
   StatusBar,
   StyleSheet,
 } from 'react-native';
+import {TabView, TabBar} from 'react-native-tab-view';
+import Colors from '../core/colors';
+
+import TabAssigned from './TabAssigned'
+import TabInProcess from './TabInProcess'
+import TabCompleted from './TabCompleted'
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  state = {
+    index: 0,
+    routes: [
+      {key: 'first', title: 'Asignadas'},
+      {key: 'second', title: 'En Proceso'},
+      {key: 'third', title: 'Terminadas'},
+    ],
+  };
+
   render() {
     return (
-      <SafeAreaView>
-      <StatusBar />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic">
-        <View style={styles.scene}>
-            <Text>Promesa: </Text>  
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <>
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor={Colors.backgroundColor}
+        />
+        <TabView
+          swipeEnabled={false}
+          navigationState={this.state}
+          renderScene={({route}) => {
+            switch (route.key) {
+              case 'first':
+                return <TabAssigned {...this.props} />;
+              case 'second':
+                return <TabInProcess {...this.props} />;
+              case 'third':
+                return <TabCompleted {...this.props} />;
+              default:
+                return null;
+            }
+          }}
+          renderTabBar={props => (
+            <TabBar
+              {...props}
+              indicatorStyle={{backgroundColor: Colors.accentColor}}
+              style={{backgroundColor: Colors.secondaryColor}}
+              scrollEnabled={false}
+            />
+          )}
+          onIndexChange={index => this.setState({index})}
+          initialLayout={{width: Dimensions.get('window').width}}
+        />
+      </>
     );
   }
 }

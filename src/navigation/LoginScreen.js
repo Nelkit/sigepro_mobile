@@ -13,7 +13,7 @@ import Colors from '../core/colors';
 import Helpers from '../core/helpers';
 import LoginTextInput from '../components/LoginTextInput';
 import MaterialButton from '../components/MaterialButton';
-import Api from '../services/api';
+import requests from '../services/requests';
 
 class LoginScreen extends React.Component {
   constructor(props) {
@@ -30,24 +30,24 @@ class LoginScreen extends React.Component {
     this.doLogin = this.doLogin.bind(this);
   }
 
-  async doLogin() {
+  doLogin() {
     this.setState({isLoading: true});
     this.setState({disabled: true});
     this.setState({errorLogin: false});
     const {navigate} = this.props.navigation;
 
-    var formData = new FormData();
-    formData.append('username', this.state.username.toLowerCase());
-    formData.append('password', this.state.password.toLowerCase());
+    var login = requests.doLogin(
+      this.state.username, 
+      this.state.password
+    )
 
-    var response = await Api.doLogin(formData);
-    if (response.data) {
-      Helpers.storeData('token', response.data.token);
-      navigate('Sync');
-    } else {
+    login.then(response => {
+      Helpers.storeData('token',response.access_token)
+      navigate('App');
+    }).catch(error => {
       this.setState({errorLogin: true});
-      console.log(response);
-    }
+      console.log("RESPUESTA FALLIDA", error)
+    })
 
     this.setState({isLoading: false});
     this.setState({disabled: false});

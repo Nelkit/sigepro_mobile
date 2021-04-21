@@ -2,8 +2,8 @@ import {processColor} from 'react-native';
 
 const background = '#E5E5E5';
 
-const primaryColor = '#502810';
-const secondaryColor = '#005EEC';
+const primaryColor = '#5B4323';
+const secondaryColor = '#70522B';
 const dangerColor = '#FC6130';
 const logoutColor = '#E74A3B';
 
@@ -11,7 +11,7 @@ const bar1Color = '#E74A3B';
 const bar2Color = '#828282';
 
 const dividerColor = '#A3A3A3';
-const accentColor = '#52DB70';
+const accentColor = '#FFDD00';
 
 const primaryText = '#3E3E3E';
 const secondaryText = '#8B8B8B';
