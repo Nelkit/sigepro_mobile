@@ -6,42 +6,57 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Button,
+  FlatList,
 } from 'react-native';
 import Colors from '../core/colors';
-import MaterialButton from '../components/MaterialButton'
-import AsyncStorage from '@react-native-community/async-storage';
+import Realm from 'realm';
+import { dbPath } from '../core/constants';
+import Models from '../core/models';
+import OrderAssignedItem from '../components/items/OrderAssignedItem'
+let realm;
 
 class TabAssigned extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      workOrderList: [],
+    };
+
+    realm = new Realm({path: dbPath});
   }
 
-  signOutAction = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-  };
+  getWorkOrders(){
+    let query = realm.objects(Models.WorkOrder.name);
+    this.setState({workOrderList: query});
+  }
+
+  componentDidMount() {
+    this.getWorkOrders()
+  }
 
   render() {
     return (
       <SafeAreaView>
-      <StatusBar
-          barStyle="light-content"
-          backgroundColor={Colors.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic">
-        <View style={styles.scene}>
-            <Text>TAB1 </Text>  
-            <MaterialButton
-                title="CERRAR SESIÓN"
-                backgroundColor={Colors.logoutColor}
-                color={Colors.white}
-                onPress={this.signOutAction}
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor={Colors.backgroundColor}
+        />
+        <FlatList
+          style={styles.flatList}
+          data={this.state.workOrderList}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{paddingBottom: 5}}
+          renderItem={({index, item}) => {
+            return (
+              <OrderAssignedItem 
+                project_name={item.project_name}
+                order_number={item.order_number}
+                date={item.created_date}
               />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            );
+          }}
+        />
+      </SafeAreaView>
     );
   }
 }
@@ -57,6 +72,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     height: '100%',
   },
+  flatList: {
+    height: '100%',
+  }
 });
 
 export default TabAssigned;

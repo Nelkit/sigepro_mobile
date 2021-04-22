@@ -14,13 +14,18 @@ import  React from 'react';
 import Colors from './src/core/colors';
 import HomeScreen from './src/navigation/HomeScreen';
 import LoginScreen from './src/navigation/LoginScreen';
+import SyncScreen from './src/navigation/SyncScreen';
 import AuthLoadingScreen from './src/navigation/AuthLoadingScreen';
 
 const Stack = createStackNavigator()
 
 function AppStack() {
   return (
-    <Stack.Navigator >
+    <Stack.Navigator initialRouteName="Sync">
+      <Stack.Screen name="Sync" component={SyncScreen} options={{
+        title:'SINCRONIZANDO',
+        headerLeft: ()=> null,
+      }}  />
       <Stack.Screen name="Home" component={HomeScreen} options={{
         title:'ORDENES',
         headerLeft: ()=> null,

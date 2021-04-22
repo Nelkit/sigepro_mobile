@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		260DACEE59ED5DAB30F02DAE /* libPods-Sigepro_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B825893F5F5EED86A772F0D /* libPods-Sigepro_mobile.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8415B1AD26311E7F002D2C78 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8415B1AC26311E7F002D2C78 /* libswiftWebKit.tbd */; };
 		A434DC8B75DE6723E0BF5025 /* libPods-Sigepro_mobile-Sigepro_mobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0D4C51021388187B8870EC /* libPods-Sigepro_mobile-Sigepro_mobileTests.a */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		7B825893F5F5EED86A772F0D /* libPods-Sigepro_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sigepro_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8132E32A349A589D731767A1 /* Pods-Sigepro_mobile-Sigepro_mobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sigepro_mobile-Sigepro_mobileTests.debug.xcconfig"; path = "Target Support Files/Pods-Sigepro_mobile-Sigepro_mobileTests/Pods-Sigepro_mobile-Sigepro_mobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Sigepro_mobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8415B1AC26311E7F002D2C78 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 		8D7C8781EEE51338B5579D13 /* Pods-Sigepro_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sigepro_mobile.release.xcconfig"; path = "Target Support Files/Pods-Sigepro_mobile/Pods-Sigepro_mobile.release.xcconfig"; sourceTree = "<group>"; };
 		BA568EC802FB5E4B63E2F550 /* Pods-Sigepro_mobile-Sigepro_mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sigepro_mobile-Sigepro_mobileTests.release.xcconfig"; path = "Target Support Files/Pods-Sigepro_mobile-Sigepro_mobileTests/Pods-Sigepro_mobile-Sigepro_mobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		E4D19402F25E5256BBEEDB31 /* Pods-Sigepro_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sigepro_mobile.debug.xcconfig"; path = "Target Support Files/Pods-Sigepro_mobile/Pods-Sigepro_mobile.debug.xcconfig"; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8415B1AD26311E7F002D2C78 /* libswiftWebKit.tbd in Frameworks */,
 				260DACEE59ED5DAB30F02DAE /* libPods-Sigepro_mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,6 +102,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8415B1AC26311E7F002D2C78 /* libswiftWebKit.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				7B825893F5F5EED86A772F0D /* libPods-Sigepro_mobile.a */,
 				4C0D4C51021388187B8870EC /* libPods-Sigepro_mobile-Sigepro_mobileTests.a */,
@@ -114,7 +118,6 @@
 				8132E32A349A589D731767A1 /* Pods-Sigepro_mobile-Sigepro_mobileTests.debug.xcconfig */,
 				BA568EC802FB5E4B63E2F550 /* Pods-Sigepro_mobile-Sigepro_mobileTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -485,11 +488,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D44RZT8CQ8;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Sigepro_mobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -511,10 +519,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D44RZT8CQ8;
 				INFOPLIST_FILE = Sigepro_mobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

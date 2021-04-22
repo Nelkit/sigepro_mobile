@@ -36,7 +36,7 @@ class HomeScreen extends React.Component {
             backgroundColor={Colors.backgroundColor}
         />
         <TabView
-          swipeEnabled={false}
+          swipeEnabled={true}
           navigationState={this.state}
           renderScene={({route}) => {
             switch (route.key) {

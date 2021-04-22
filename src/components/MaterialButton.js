@@ -12,7 +12,7 @@ export default class MaterialButton extends Component {
           // eslint-disable-next-line react-native/no-inline-styles
           {
             backgroundColor: this.background,
-            borderRadius: 8,
+            borderRadius: 25,
           },
         ]}
         disabled={this.props.disabled}
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   button: {
     fontSize: 18,
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: 25,
     paddingHorizontal: 40,
     justifyContent: 'center',
     textAlign: 'center',

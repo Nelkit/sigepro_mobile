@@ -9,11 +9,18 @@ import {
   Button,
 } from 'react-native';
 import Colors from '../core/colors';
+import MaterialButton from '../components/MaterialButton'
+import AsyncStorage from '@react-native-community/async-storage';
 
 class TabCompleted extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  signOutAction = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Auth');
+  };
 
   render() {
     return (
@@ -25,7 +32,13 @@ class TabCompleted extends React.Component {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic">
         <View style={styles.scene}>
-            <Text>TAB2 </Text>  
+            <Text>TAB3 </Text>  
+            <MaterialButton
+                title="CERRAR SESIÓN"
+                backgroundColor={Colors.logoutColor}
+                color={Colors.white}
+                onPress={this.signOutAction}
+              />
         </View>
       </ScrollView>
     </SafeAreaView>
