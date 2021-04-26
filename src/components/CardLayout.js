@@ -10,16 +10,16 @@ class CardLayout extends React.Component {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 25,
     borderBottomWidth: 0,
     shadowColor: 'rgba(0,0,0,0.3)',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 2,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 15,
   },
 });
 

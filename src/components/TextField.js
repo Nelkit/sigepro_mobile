@@ -1,17 +1,26 @@
 import React, {Component} from 'react';
 import {TextInput, StyleSheet} from 'react-native';
 import Colors from '../core/colors';
+import PropTypes from 'prop-types';
 
-export default class LoginTextInput extends Component {
+export default class TextField extends Component {
+  static propTypes = {
+    placeholder: PropTypes.string,
+    value: PropTypes.string,
+    secureTextEntry: PropTypes.bool, 
+  }
+
   render() {
+    const {placeholder, value, secureTextEntry} = this.props;
+
     return (
       <TextInput
         style={styles.textInput}
-        placeholder={this.props.placeholder}
+        placeholder={placeholder}
         placeholderTextColor={Colors.secondaryText}
-        value={this.props.value}
+        value={value}
         autoCapitalize={'none'}
-        secureTextEntry={this.props.secureTextEntry}
+        secureTextEntry={secureTextEntry}
         onChangeText={this.props.onChangeText}
       />
     );
@@ -22,7 +31,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: '100%',
     height: 50,
-    borderRadius: 8,
+    borderRadius: 25,
     color: Colors.primaryText,
     backgroundColor: '#F2F2F2',
     paddingLeft: 10,

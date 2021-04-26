@@ -1,18 +1,16 @@
 import React from 'react';
 import {
-  View,
-  Text,
   SafeAreaView,
-  ScrollView,
+  TouchableHighlight,
   StatusBar,
   StyleSheet,
   FlatList,
 } from 'react-native';
-import Colors from '../core/colors';
+import Colors from '../../core/colors';
 import Realm from 'realm';
-import { dbPath } from '../core/constants';
-import Models from '../core/models';
-import OrderAssignedItem from '../components/items/OrderAssignedItem'
+import { dbPath } from '../../core/constants';
+import { WorkOrder } from '../../models';
+import OrderAssignedItem from '../../components/items/OrderAssignedItem'
 let realm;
 
 class TabAssigned extends React.Component {
@@ -21,12 +19,11 @@ class TabAssigned extends React.Component {
     this.state = {
       workOrderList: [],
     };
-
     realm = new Realm({path: dbPath});
   }
 
   getWorkOrders(){
-    let query = realm.objects(Models.WorkOrder.name);
+    let query = realm.objects(WorkOrder.name);
     this.setState({workOrderList: query});
   }
 
@@ -35,6 +32,8 @@ class TabAssigned extends React.Component {
   }
 
   render() {
+    const {navigate} = this.props.navigation;
+    
     return (
       <SafeAreaView>
         <StatusBar
@@ -48,11 +47,18 @@ class TabAssigned extends React.Component {
           contentContainerStyle={{paddingBottom: 5}}
           renderItem={({index, item}) => {
             return (
-              <OrderAssignedItem 
-                project_name={item.project_name}
-                order_number={item.order_number}
-                date={item.created_date}
-              />
+              <TouchableHighlight
+              style={styles.boxSelect}
+              underlayColor="transparent"
+              onPress={() => navigate('OrderDetail', item)}>
+                <OrderAssignedItem 
+                  project_name={item.project_name}
+                  order_number={item.order_number}
+                  hours_by_vehicle={item.hours_by_vehicle}
+                  distances_by_work={item.distances_by_work}
+                  date={item.created_date}
+                />
+              </TouchableHighlight>
             );
           }}
         />

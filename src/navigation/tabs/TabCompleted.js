@@ -8,8 +8,8 @@ import {
   StyleSheet,
   Button,
 } from 'react-native';
-import Colors from '../core/colors';
-import MaterialButton from '../components/MaterialButton'
+import Colors from '../../core/colors';
+import MaterialButton from '../../components/MaterialButton'
 import AsyncStorage from '@react-native-community/async-storage';
 
 class TabCompleted extends React.Component {
@@ -34,6 +34,7 @@ class TabCompleted extends React.Component {
         <View style={styles.scene}>
             <Text>TAB3 </Text>  
             <MaterialButton
+                borderRadius={25}
                 title="CERRAR SESIÓN"
                 backgroundColor={Colors.logoutColor}
                 color={Colors.white}

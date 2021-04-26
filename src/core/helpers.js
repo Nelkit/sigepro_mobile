@@ -2,8 +2,19 @@ import moment from 'moment';
 import 'moment/locale/es';
 import Colors from './colors';
 import AsyncStorage from '@react-native-community/async-storage';
+import Realm from 'realm';
+import { dbPath } from '../core/constants';
 
 export default {
+  nextID(modelName) {
+    realm = new Realm({path: dbPath});
+    var nextId = 1
+    let topId = realm.objects(modelName).max('id');
+    if (topId) {
+      nextId = topId+1
+    }
+    return nextId
+  },
   getRandomColor() {
     var lum = -0.25;
     var hex = String('#' + Math.random().toString(16).slice(2, 8).toUpperCase()).replace(/[^0-9a-f]/gi, '');

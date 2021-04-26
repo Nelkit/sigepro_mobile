@@ -9,13 +9,13 @@ import {
   Text,
   ActivityIndicator,
 } from 'react-native';
-import Colors from '../core/colors';
-import Helpers from '../core/helpers';
-import LoginTextInput from '../components/LoginTextInput';
-import MaterialButton from '../components/MaterialButton';
-import requests from '../services/requests';
+import Colors from '../../core/colors';
+import Helpers from '../../core/helpers';
+import TextField from '../../components/TextField';
+import MaterialButton from '../../components/MaterialButton';
+import requests from '../../services/requests';
 
-class LoginScreen extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,7 +43,7 @@ class LoginScreen extends React.Component {
 
     login.then(response => {
       Helpers.storeData('token',response.access_token)
-      navigate('App');
+      navigate('Root');
     }).catch(error => {
       this.setState({errorLogin: true});
       console.log("RESPUESTA FALLIDA", error)
@@ -69,18 +69,18 @@ class LoginScreen extends React.Component {
 
                 <Image
                   style={styles.logo}
-                  source={require('../assets/images/logo.png')}
+                  source={require('../../assets/images/logo.png')}
                 />
 
                 <View style={styles.formRow}>
-                  <LoginTextInput
+                  <TextField
                     onChangeText={username => this.setState({username})}
                     value={this.state.username}
                     placeholder="Ingrese Usuario"
                   />
                 </View>
                 <View style={styles.formRow}>
-                  <LoginTextInput
+                  <TextField
                     onChangeText={password => this.setState({password})}
                     value={this.state.password}
                     placeholder="Ingrese Contraseña"
@@ -90,6 +90,8 @@ class LoginScreen extends React.Component {
                 <MaterialButton
                   title="Entrar"
                   disabledText="Espere un Momento..."
+                  borderRadius={25}
+                  uppercase={true}
                   disabled={this.state.disabled}
                   backgroundColor={Colors.primaryColor}
                   color={Colors.primaryDarkText}
@@ -154,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default Login;

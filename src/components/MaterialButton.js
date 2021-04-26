@@ -1,39 +1,81 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {TouchableHighlight, StyleSheet, Text, View} from 'react-native';
+import PropTypes from 'prop-types'
 
 export default class MaterialButton extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isPress: false,
+    };
+  }
+  
+  static propTypes = {
+    title: PropTypes.string,
+    color: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    disabledText: PropTypes.string,
+    disabled: PropTypes.bool,
+    height: PropTypes.number,
+    paddingHorizontal: PropTypes.number,
+    fontSize: PropTypes.number,
+    uppercase: PropTypes.bool,
+    borderRadius: PropTypes.number,
+  }
+
+  static defaultProps = {
+    height: 50,
+    paddingHorizontal: 40,
+    fontSize: 20,
+    uppercase: true
+  }
+
   render() {
-    this.color = this.props.color;
-    this.background = this.props.backgroundColor;
+    const {title, color, backgroundColor, disabledText, disabled, height, paddingHorizontal, fontSize, uppercase, borderRadius} = this.props;
 
     return (
-      <TouchableOpacity
-        style={[
-          // eslint-disable-next-line react-native/no-inline-styles
-          {
-            backgroundColor: this.background,
-            borderRadius: 25,
-          },
-        ]}
-        disabled={this.props.disabled}
-        activeOpacity={this.props.disabled ? 0.1 : 1}
+      <TouchableHighlight
+        underlayColor= 'none'
+        onHideUnderlay={() =>{
+          this.setState({isPress: false})
+        }}
+        onShowUnderlay={() =>{
+          this.setState({isPress: true})
+        }}
+        disabled={disabled}
+        style = {this.state.isPress ? styles.btnPress : styles.btnNormal}
+        activeOpacity={disabled ? 0.1 : 1}
         onPress={this.props.onPress}>
-        <Text style={[styles.button, {color: this.color}]}>
-          {this.props.disabled ? this.props.disabledText : this.props.title}
-        </Text>
-      </TouchableOpacity>
+        <View style={[
+          styles.button,
+          {
+            backgroundColor: backgroundColor,
+            borderRadius: borderRadius,
+            height: height,
+            paddingHorizontal: paddingHorizontal,
+          },
+        ]}>
+          <View style={styles.icon}>{this.props.children}</View>
+          <Text style={{color: color, fontSize: fontSize, textTransform: uppercase ? 'uppercase': 'none'}}>
+            {disabled ? disabledText : title}
+          </Text>
+        </View>
+      </TouchableHighlight>
     );
   }
 }
 
 const styles = StyleSheet.create({
   button: {
-    fontSize: 18,
-    paddingVertical: 10,
-    borderRadius: 25,
-    paddingHorizontal: 40,
-    justifyContent: 'center',
-    textAlign: 'center',
-    textTransform: 'uppercase',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent : 'center',
+    flexDirection: 'row',
   },
+  btnNormal: {
+    transform: [{ scale: 1 }]
+  },
+  btnPress: {
+    transform: [{ scale: 0.9 }]
+  }
 });

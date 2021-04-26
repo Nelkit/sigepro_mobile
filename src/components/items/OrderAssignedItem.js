@@ -1,37 +1,88 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
 import CardLayout from '../CardLayout'
+import Pill from '../Pill'
 import MaterialButton from '../MaterialButton'
+import Divider from '../Divider'
+import TextFont from '../TextFont'
 import Colors from '../../core/colors'
 import Helpers from '../../core/helpers'
+import PropTypes from 'prop-types'
 
 export default class OrderAssignedItem extends Component {
   constructor(props) {
     super(props);
   }
 
+  static propTypes = {
+    project_name: PropTypes.string,
+    order_number: PropTypes.string,
+    distances_by_work: PropTypes.object,
+    hours_by_vehicle: PropTypes.object,
+    date: PropTypes.instanceOf(Date),
+  }
+
+  static defaultProps = {
+    project_name: '',
+    order_number: '',
+    distances_by_work: [],
+    hours_by_vehicle: []
+  }
+
   render() {
+    const {project_name, order_number, distances_by_work, hours_by_vehicle, date} = this.props;
 
     return (
       <CardLayout>
         <View style={styles.cardbody}>
-          <Text style={styles.text}>
-            <Text style={styles.textbold}>Proyecto: </Text>{this.props.project_name}
-          </Text>
-          <View style={styles.divider}/>
-          <Text style={styles.text}>
-            <Text style={styles.textbold}>Orden: </Text>#{this.props.order_number}
-          </Text>
-          <View style={styles.divider}/>
-          <Text style={styles.textbold}>Kilometros por tramo: </Text>
-          <Text style={styles.textbold}>Horas por Maquinaria: </Text>
-          <View style={styles.divider}/>
+          <TextFont fontSize={18}>
+            <TextFont fontWeight={'bold'}>Proyecto: </TextFont>{project_name}
+          </TextFont>
+          <Divider/>
+          <TextFont fontSize={18}>
+            <TextFont fontWeight={'bold'}>Orden: </TextFont>#{order_number}
+          </TextFont>
+          <Divider/>
+          <TextFont fontSize={18} fontWeight={'bold'}>Kilometros por tramo: </TextFont>
+          <FlatList
+              style={styles.flatlist}
+              horizontal
+              data={distances_by_work}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({index, item}) => {
+                return (
+                  <Pill title={item.work_type_title} value={`${item.distance} KM`} color={item.work_type_color} />
+                );
+              }}
+          />
+          <TextFont fontSize={18} fontWeight={'bold'}>Horas por Maquinaria: </TextFont>
+          <FlatList
+            style={styles.flatlist}
+            data={hours_by_vehicle}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({index, item}) => {
+              return (
+                <Text>{item.hours} Hrs {item.vehicle_data.title}</Text>
+              );
+            }}
+          />
+          <Divider/>
           <View style={styles.bottom}>
-            <Text style={styles.text}>{Helpers.getDateFromNow(this.props.date)}</Text>
+            <View style={styles.datecontainer}>
+              <Image
+                style={styles.icon}
+                source={require('../../assets/images/icons/ic_calendar.png')}
+              />
+              <Text style={styles.datetext}>{Helpers.getDateFromNow(date)}</Text>
+            </View>
             <MaterialButton
               title="Comenzar"
               backgroundColor={Colors.primaryColor}
               color={Colors.white}
+              height={35}
+              borderRadius={17.5}
+              paddingHorizontal={15}
+              uppercase={false}
             />
           </View>
         </View>
@@ -46,23 +97,29 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
   },
-  divider: {
-    marginVertical: 15,
-    backgroundColor: "#F2F2F2",
-    height: 2,
-    width: "100%"
+  datecontainer:{
+    flexDirection: "row",
+    display: 'flex',
+    alignItems: 'center',
   },
-  text: {
-    fontSize: 18,
-  },
-  textbold:{
-    fontSize: 18,
-    fontWeight: "bold" 
+  datetext:{
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#565656"
   },
   bottom:{
     flexDirection: "row",
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 7,
+  },
+  flatlist: {
+    marginTop: 5,
+    marginBottom: 10,
   }
 });

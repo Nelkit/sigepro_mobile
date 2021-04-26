@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Button,
 } from 'react-native';
-import Colors from '../core/colors';
+import Colors from '../../core/colors';
 
 class TabInProcess extends React.Component {
   constructor(props) {

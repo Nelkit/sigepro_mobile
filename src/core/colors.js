@@ -4,7 +4,9 @@ const background = '#E5E5E5';
 
 const primaryColor = '#5B4323';
 const secondaryColor = '#70522B';
-const dangerColor = '#FC6130';
+const dangerColor = '#E35700';
+const warningColor = '#E39600';
+const successColor = '#3D900A';
 const logoutColor = '#E74A3B';
 
 const bar1Color = '#E74A3B';
@@ -14,18 +16,13 @@ const dividerColor = '#A3A3A3';
 const accentColor = '#FFDD00';
 
 const primaryText = '#3E3E3E';
-const secondaryText = '#8B8B8B';
+const secondaryText = '#9F9898';
 const primaryDarkText = '#FFF';
 const secondaryDarkText = 'rgba(255,255,255,0.4)';
 
 const bottomGray = '#F8F8F8';
 
 const white = '#FFF';
-
-const reprobado = '#E74A3B';
-const aprobado = '#FD7E13';
-const excelente = '#F6C23E';
-const sobresaliente = '#1CC88A';
 
 const indicatorButton = '#1F1F1F';
 
@@ -36,6 +33,8 @@ module.exports = {
   primaryDarkText,
   secondaryDarkText,
   dangerColor,
+  warningColor,
+  successColor,
   dividerColor,
   primaryText,
   secondaryText,
@@ -45,10 +44,6 @@ module.exports = {
   bar1Color,
   bar2Color,
   bottomGray,
-  reprobado,
-  aprobado,
-  excelente,
-  sobresaliente,
   logoutColor,
   indicatorButton,
 };

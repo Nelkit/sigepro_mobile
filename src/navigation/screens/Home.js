@@ -8,13 +8,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
-import Colors from '../core/colors';
+import Colors from '../../core/colors';
 
-import TabAssigned from './TabAssigned'
-import TabInProcess from './TabInProcess'
-import TabCompleted from './TabCompleted'
+import TabAssigned from '../tabs/TabAssigned'
+import TabInProcess from '../tabs/TabInProcess'
+import TabCompleted from '../tabs/TabCompleted'
 
-class HomeScreen extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default Home;

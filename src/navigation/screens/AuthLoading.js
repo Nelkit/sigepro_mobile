@@ -7,8 +7,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Colors from '../core/colors';
-class AuthLoadingScreen extends React.Component {
+import Colors from '../../core/colors';
+class AuthLoading extends React.Component {
   componentDidMount() {
     this._bootstrapAsync();
   }
@@ -19,7 +19,7 @@ class AuthLoadingScreen extends React.Component {
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+    this.props.navigation.navigate(userToken ? 'Root' : 'Auth');
   };
 
   // Render any loading content that you like here
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AuthLoadingScreen;
+export default AuthLoading;
