@@ -49,7 +49,7 @@ class Sync extends React.Component {
         Month,
         VehicleDriver
       ],
-      schemaVersion: 1,
+      schemaVersion: 2,
       migration: function(oldRealm, newRealm) {
 
       },

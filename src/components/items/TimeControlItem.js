@@ -9,11 +9,11 @@ import Row from '../Row';
 import Col from '../Col';
 import Colors from '../../core/colors';
 
-const Cell = ({ day, initial_hourmeter, final_hourmeter, hours }) => {
+const Cell = ({ date, initial_hourmeter, final_hourmeter, hours }) => {
   return (
     <Row>
       <Col weight={1}>
-        <TextFont fontSize={16} paddingBottom={5} >{day}</TextFont>
+        <TextFont fontSize={16} paddingBottom={5} >{date}</TextFont>
       </Col>
       <Col weight={2}>
         <TextFont fontSize={16} paddingBottom={5} >{initial_hourmeter}</TextFont>
@@ -42,7 +42,7 @@ export default class TimeControlItem extends Component {
         <View style={styles.cardBody}>
           <Row>
             <Col weight={1}>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Dia</TextFont>
+              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Fecha</TextFont>
             </Col>
             <Col weight={2}>
               <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>H. Inicial</TextFont>
@@ -55,33 +55,19 @@ export default class TimeControlItem extends Component {
             </Col>
           </Row>
           <Divider />
-          {months.map((month, m) => (
-            <View key={m}>
-              {time_controls.map((item, i) => {      
-                if (item.month == month.month && item.year == month.year){
+              {time_controls.map((item, i) => {   
                   return (     
                     <View key={i}>
-                      { i == 0 &&<TextFont  
-                        fontSize={20} 
-                        fontWeight={'bold'} 
-                        paddingTop={0} 
-                        paddingBottom={5}>
-                          {month.month} {month.year}
-                        </TextFont>
-                      }
                       <Cell
-                        day={item.day}
+                        date={`${item.day} ${item.month} ${item.year}`}
                         initial_hourmeter={item.initial_hourmeter}
                         final_hourmeter={item.final_hourmeter}
                         hours={item.hours}
                       />
-                      </View>
-                    )
-                  }
-                
-            })}
-            </View>
-          ))}
+                      <Divider />
+                    </View>
+                  )
+              })}
         </View>
         <View style={styles.cardFooter}>
           <MaterialButton

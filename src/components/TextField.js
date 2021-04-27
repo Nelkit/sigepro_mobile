@@ -8,10 +8,11 @@ export default class TextField extends Component {
     placeholder: PropTypes.string,
     value: PropTypes.string,
     secureTextEntry: PropTypes.bool, 
+    keyboardType: PropTypes.string,
   }
 
   render() {
-    const {placeholder, value, secureTextEntry} = this.props;
+    const {placeholder, value, secureTextEntry, keyboardType} = this.props;
 
     return (
       <TextInput
@@ -21,6 +22,7 @@ export default class TextField extends Component {
         value={value}
         autoCapitalize={'none'}
         secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
         onChangeText={this.props.onChangeText}
       />
     );

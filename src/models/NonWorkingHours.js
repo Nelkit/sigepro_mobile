@@ -3,6 +3,7 @@ export const NonWorkingHours = {
   primaryKey: 'id',
   properties: {
     id: 'int',
+    remoteId: { type: 'int', default: 0 },
     project_progress: 'int',
     day: 'int',
     month: 'string',
@@ -10,6 +11,7 @@ export const NonWorkingHours = {
     reason: 'string',
     reason_str: 'string',
     observations: 'string?',
-    hours: 'int'
+    hours: 'int',
+    isUploaded: { type: 'bool', default: true },
   },
 };

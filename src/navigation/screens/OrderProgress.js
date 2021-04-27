@@ -17,26 +17,48 @@ import MaterialButton from '../../components/MaterialButton';
 import TimeControlItem from '../../components/items/TimeControlItem'
 import FuelControlItem from '../../components/items/FuelControlItem'
 import NonWorkingHourItem from '../../components/items/NonWorkingHourItem'
+import Realm from 'realm';
+import { dbPath } from '../../core/constants';
+import { TimeControl } from '../../models';
+let realm;
 
 class OrderProgress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      time_controls: [],
     };
+
+    realm = new Realm({path: dbPath});    
+  }
+
+  getTimeControls = () =>{
+    const { params } = this.props.route
+    const { id } = params;
+
+    let timeControl = realm.objects(TimeControl.name).filtered(`project_progress = ${id}`);
+    this.setState({time_controls: timeControl})
   }
 
   componentDidMount() {
+    this.getTimeControls()
     LogBox.ignoreLogs([
       'Non-serializable values were found in the navigation state',
       'VirtualizedLists should never be nested',
     ]);
   }
 
+  didAddTimeControl = () => {
+    this.getTimeControls()
+  };
+
+
   render() {
     const {navigate} = this.props.navigation;
     const { params } = this.props.route
+    const { time_controls } = this.state;
     console.log(params)
-    const {vehicle_name, vehicle_driver_name, time_controls, fuel_controls, non_working_hours, months} = params;
+    const {id, vehicle_name, vehicle_driver_name, fuel_controls, non_working_hours, months} = params;
 
     return (
       <>
@@ -67,7 +89,7 @@ class OrderProgress extends React.Component {
                     height={120}
                     borderRadius={25}
                     uppercase={true}
-                    onPress={()=>{navigate('AddTimeControl')}}
+                    onPress={()=>{navigate('AddTimeControl', {id: id, didAddTimeControl: this.didAddTimeControl})}}
                   >          
                     <Image
                       style={styles.icon}
@@ -76,7 +98,7 @@ class OrderProgress extends React.Component {
                   </MaterialButton>
                 </View>
               ):(
-                <TimeControlItem time_controls={time_controls} months={months} onPress={()=>{navigate('AddTimeControl')}}/>
+                <TimeControlItem time_controls={time_controls} months={months} onPress={()=>{navigate('AddTimeControl', {id: id, didAddTimeControl: this.didAddTimeControl})}}/>
               )}
 
               {/* FuelControl */}

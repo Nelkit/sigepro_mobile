@@ -11,7 +11,7 @@ export default {
     var nextId = 1
     let topId = realm.objects(modelName).max('id');
     if (topId) {
-      nextId = topId+1
+      nextId = topId + 1
     }
     return nextId
   },
@@ -70,4 +70,7 @@ export default {
       // Error saving data
     }
   },
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 };

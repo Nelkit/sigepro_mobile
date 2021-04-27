@@ -27,7 +27,7 @@ class AddOrderProgress extends React.Component {
     realm = new Realm({path: dbPath});
   }
 
-  getVehicles(){
+  getVehicles(){ 
     let query = realm.objects(Vehicle.name);
 
     var vehicles = []
@@ -57,11 +57,11 @@ class AddOrderProgress extends React.Component {
   saveNewOrderProgress = () => {
     const { params } = this.props.route
     const { selectedVehicle, selectedVehicleDriver } = this.state
-    var id = Helpers.nextID(OrderProgress.name)
+    var nextID = Helpers.nextID(OrderProgress.name)
     const workOrder = realm.objectForPrimaryKey(WorkOrder.name, params.order_id);
 
     var newProgress = {
-      id: id,
+      id: nextID,
       project: params.project,
       vehicle: selectedVehicle.value,
       vehicle_code: selectedVehicle.code,
@@ -80,13 +80,11 @@ class AddOrderProgress extends React.Component {
       realm.write(() => {
         workOrder.order_progress.push(newProgress)
       });
-      params.didAddOrderProgress()
+      params.didAddTimeControl()
       this.props.navigation.goBack()
     }else{
       console.log("Selecciona un vehiculo y operador para continuar")
     }
-
-    
   }
 
   onVehicleDropdownChange = (value) => {
@@ -143,6 +141,18 @@ class AddOrderProgress extends React.Component {
             backgroundColor={Colors.primaryColor}
             color={Colors.primaryDarkText}
             onPress={this.saveNewOrderProgress}
+          />
+        </View>  
+        <View style={{paddingTop: 10}}>
+          <MaterialButton
+            title="Cancelar"
+            disabledText="Espere un Momento..."
+            uppercase={true}
+            borderRadius={25}
+            disabled={this.state.disabled}
+            backgroundColor={Colors.backgroundColor}
+            color={Colors.primaryText}
+            onPress={()=>this.props.navigation.goBack()}
           />
         </View>
       </DialogLayout>
