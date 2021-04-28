@@ -49,20 +49,9 @@ export default class NonWorkingHourItem extends Component {
             </Col>
           </Row>
           <Divider />
-          {months.map((month, m) => (
-            <View key={m}>
               {non_working_hours.map((item, i) => {      
-                if (item.month == month.month && item.year == month.year){
                   return (     
                     <View key={i}>
-                      { i == 0 &&<TextFont  
-                        fontSize={20} 
-                        fontWeight={'bold'} 
-                        paddingTop={0} 
-                        paddingBottom={5}>
-                          {month.month} {month.year}
-                        </TextFont>
-                      }
                       <Cell
                         day={item.day}
                         reason_str={item.reason_str}
@@ -70,11 +59,7 @@ export default class NonWorkingHourItem extends Component {
                       />
                       </View>
                     )
-                  }
-                
             })}
-            </View>
-          ))}
         </View>
         <View style={styles.cardFooter}>
           <MaterialButton

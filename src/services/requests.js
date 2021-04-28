@@ -103,4 +103,112 @@ export default {
       throw error
     }
   },
+  async uploadTimeControls(
+    project_progress,
+    day,
+    month,
+    year,
+    initial_hourmeter,
+    hours,
+    other_works,
+    final_hourmeter,
+  ) {
+    const token = await AsyncStorage.getItem('token');
+    var formData = new FormData();
+    formData.append('project_progress', project_progress);
+    formData.append('day', day);
+    formData.append('month', month);
+    formData.append('year', year);
+    formData.append('initial_hourmeter', initial_hourmeter);
+    formData.append('hours', hours);
+    formData.append('other_works', other_works);
+    formData.append('final_hourmeter', final_hourmeter);
+    formData.append('active', true);
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      },
+    };
+
+    try {
+      var response = await fetchJSON(`${urlApi}/api/mobile/time_controls/`, options)
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
+  async uploadFuelControls(
+    project_progress,
+    day,
+    month,
+    year,
+    quantity,
+    price,
+  ) {
+    const token = await AsyncStorage.getItem('token');
+    var formData = new FormData();
+    formData.append('project_progress', project_progress);
+    formData.append('day', day);
+    formData.append('month', month);
+    formData.append('year', year);
+    formData.append('quantity', quantity);
+    formData.append('price', price);
+    formData.append('active', true);
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      },
+    };
+
+    try {
+      var response = await fetchJSON(`${urlApi}/api/mobile/fuel_controls/`, options)
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
+  async uploadNonWorkingHours(
+    project_progress,
+    day,
+    month,
+    year,
+    reason,
+    observations,
+    hours
+  ) {
+    const token = await AsyncStorage.getItem('token');
+    var formData = new FormData();
+    formData.append('project_progress', project_progress);
+    formData.append('day', day);
+    formData.append('month', month);
+    formData.append('year', year);
+    formData.append('reason', reason);
+    formData.append('observations', observations);
+    formData.append('hours', hours);
+    formData.append('active', true);
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      },
+    };
+
+    try {
+      var response = await fetchJSON(`${urlApi}/api/mobile/non_working_hours/`, options)
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
 }

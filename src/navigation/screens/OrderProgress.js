@@ -19,7 +19,7 @@ import FuelControlItem from '../../components/items/FuelControlItem'
 import NonWorkingHourItem from '../../components/items/NonWorkingHourItem'
 import Realm from 'realm';
 import { dbPath } from '../../core/constants';
-import { TimeControl } from '../../models';
+import { FuelControl, NonWorkingHours, TimeControl } from '../../models';
 let realm;
 
 class OrderProgress extends React.Component {
@@ -27,38 +27,46 @@ class OrderProgress extends React.Component {
     super(props);
     this.state = {
       time_controls: [],
+      fuel_controls: [],
+      non_working_hours: [],
     };
 
     realm = new Realm({path: dbPath});    
   }
 
-  getTimeControls = () =>{
+  getProgressData = () =>{
     const { params } = this.props.route
     const { id } = params;
 
-    let timeControl = realm.objects(TimeControl.name).filtered(`project_progress = ${id}`);
-    this.setState({time_controls: timeControl})
+    let timeControls = realm.objects(TimeControl.name).filtered(`project_progress = ${id}`);
+    this.setState({time_controls: timeControls})
+
+    let fuelControls = realm.objects(FuelControl.name).filtered(`project_progress = ${id}`);
+    this.setState({fuel_controls: fuelControls})
+
+    let nonWorkingHours = realm.objects(NonWorkingHours.name).filtered(`project_progress = ${id}`);
+    this.setState({non_working_hours: nonWorkingHours})
   }
 
   componentDidMount() {
-    this.getTimeControls()
+    this.getProgressData()
     LogBox.ignoreLogs([
       'Non-serializable values were found in the navigation state',
       'VirtualizedLists should never be nested',
     ]);
   }
 
-  didAddTimeControl = () => {
-    this.getTimeControls()
+  didAddProgressHandler = () => {
+    this.getProgressData()
   };
 
 
   render() {
     const {navigate} = this.props.navigation;
     const { params } = this.props.route
-    const { time_controls } = this.state;
+    const { time_controls, fuel_controls, non_working_hours } = this.state;
     console.log(params)
-    const {id, vehicle_name, vehicle_driver_name, fuel_controls, non_working_hours, months} = params;
+    const {id, vehicle_name, vehicle_driver_name, months} = params;
 
     return (
       <>
@@ -89,7 +97,7 @@ class OrderProgress extends React.Component {
                     height={120}
                     borderRadius={25}
                     uppercase={true}
-                    onPress={()=>{navigate('AddTimeControl', {id: id, didAddTimeControl: this.didAddTimeControl})}}
+                    onPress={()=>{navigate('AddTimeControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
                   >          
                     <Image
                       style={styles.icon}
@@ -98,7 +106,7 @@ class OrderProgress extends React.Component {
                   </MaterialButton>
                 </View>
               ):(
-                <TimeControlItem time_controls={time_controls} months={months} onPress={()=>{navigate('AddTimeControl', {id: id, didAddTimeControl: this.didAddTimeControl})}}/>
+                <TimeControlItem time_controls={time_controls} months={months} onPress={()=>{navigate('AddTimeControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}/>
               )}
 
               {/* FuelControl */}
@@ -111,7 +119,7 @@ class OrderProgress extends React.Component {
                     height={120}
                     borderRadius={25}
                     uppercase={true}
-                    onPress={()=>{navigate('AddFuelControl')}}
+                    onPress={()=>{navigate('AddFuelControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
                   >          
                     <Image
                       style={styles.icon}
@@ -120,7 +128,7 @@ class OrderProgress extends React.Component {
                   </MaterialButton>
                 </View>
               ):(
-                <FuelControlItem fuel_controls={fuel_controls} months={months} onPress={()=>{navigate('AddFuelControl')}}/>
+                <FuelControlItem fuel_controls={fuel_controls} months={months} onPress={()=>{navigate('AddFuelControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}/>
               )}
 
               {/* NonWorkingHours */}
@@ -133,7 +141,7 @@ class OrderProgress extends React.Component {
                     height={120}
                     borderRadius={25}
                     uppercase={true}
-                    onPress={()=>{navigate('AddNonWorkingHours')}}
+                    onPress={()=>{navigate('AddNonWorkingHours', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
                   >          
                     <Image
                       style={styles.icon}
@@ -142,7 +150,7 @@ class OrderProgress extends React.Component {
                   </MaterialButton>
                 </View>
               ):(
-                <NonWorkingHourItem non_working_hours={non_working_hours} months={months} onPress={()=>{navigate('AddNonWorkingHours')}}/>
+                <NonWorkingHourItem non_working_hours={non_working_hours} months={months} onPress={()=>{navigate('AddNonWorkingHours', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}/>
               )}
           </ScrollView>
         </View>

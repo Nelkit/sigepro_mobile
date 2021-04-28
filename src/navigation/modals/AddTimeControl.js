@@ -13,7 +13,7 @@ import { dbPath } from '../../core/constants';
 import moment from 'moment';
 import 'moment/locale/es';
 import Realm from 'realm';
-import { Month, OrderProgress, TimeControl } from '../../models';
+import { OrderProgress, TimeControl } from '../../models';
 let realm;
 
 class AddTimeControl extends React.Component {
@@ -31,8 +31,10 @@ class AddTimeControl extends React.Component {
   saveNewTimeControl = () => {
     const { params } = this.props.route
     const { initial_hourmeter, final_hourmeter } = this.state
+    
     var nextID = Helpers.nextID(TimeControl.name)
     const orderProgress = realm.objectForPrimaryKey(OrderProgress.name, params.id);
+    
     var today = new Date();
     var day = parseInt(moment().format('D'));
     var year = String(today.getFullYear());
@@ -48,13 +50,14 @@ class AddTimeControl extends React.Component {
       initial_hourmeter: parseInt(initial_hourmeter),
       hours: parseInt(hours),
       final_hourmeter: parseInt(final_hourmeter),
+      isUploaded: false,
     }
 
     if (orderProgress){
       realm.write(() => {
         orderProgress.time_controls.push(newTimeControl)
       });
-      params.didAddTimeControl()
+      params.didAddProgressHandler()
       this.props.navigation.goBack()
     }else{
       console.log("No se encontro ningun progreso")
@@ -64,14 +67,14 @@ class AddTimeControl extends React.Component {
   initialHourmeterOnChange = (value) => {
     this.setState({initial_hourmeter: value})
     
-    const { initial_hourmeter, final_hourmeter } = this.state
+    const { final_hourmeter } = this.state
     this.setState({hours: parseInt(final_hourmeter) - parseInt(value)})
   }
 
   finalHourmeterOnChange = (value) => {
     this.setState({final_hourmeter: value})
     
-    const { initial_hourmeter, final_hourmeter } = this.state
+    const { initial_hourmeter } = this.state
     this.setState({hours: parseInt(value) - parseInt(initial_hourmeter)})
   }
 

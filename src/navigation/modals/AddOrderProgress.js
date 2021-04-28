@@ -80,7 +80,7 @@ class AddOrderProgress extends React.Component {
       realm.write(() => {
         workOrder.order_progress.push(newProgress)
       });
-      params.didAddTimeControl()
+      params.didAddOrderProgress()
       this.props.navigation.goBack()
     }else{
       console.log("Selecciona un vehiculo y operador para continuar")

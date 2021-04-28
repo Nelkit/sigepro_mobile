@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: '100%',
-    fontSize: 16,
+    fontSize: 22,
   },
   chevronIcon:{
     width: 25,

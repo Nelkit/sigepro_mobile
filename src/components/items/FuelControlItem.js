@@ -49,33 +49,18 @@ export default class FuelControlItem extends Component {
             </Col>
           </Row>
           <Divider />
-          {months.map((month, m) => (
-            <View key={m}>
-              {fuel_controls.map((item, i) => {      
-                if (item.month == month.month && item.year == month.year){
-                  return (     
-                    <View key={i}>
-                      { i == 0 &&<TextFont  
-                        fontSize={20} 
-                        fontWeight={'bold'} 
-                        paddingTop={0} 
-                        paddingBottom={5}>
-                          {month.month} {month.year}
-                        </TextFont>
-                      }
-                      <Cell
-                        day={item.day}
-                        quantity={item.quantity}
-                        price={item.price}
-                        hours={item.hours}
-                      />
-                      </View>
-                    )
-                  }
-                
+            {fuel_controls.map((item, i) => {      
+                return (     
+                  <View key={i}>
+                    <Cell
+                      day={item.day}
+                      quantity={item.quantity}
+                      price={item.price}
+                      hours={item.hours}
+                    />
+                    </View>
+                  )  
             })}
-            </View>
-          ))}
         </View>
         <View style={styles.cardFooter}>
           <MaterialButton

@@ -3,19 +3,23 @@ import {Text, StyleSheet, View} from 'react-native';
 import Colors from '../../core/colors';
 import LottieView from 'lottie-react-native';
 
-class SyncItem extends React.Component {
+class SyncUploadItem extends React.Component {
   render() {
+    const { title, total, current, isFinished } = this.props;
+
     return (
       <View style={styles.body}>
         <View style={styles.containerCheck}>
-          <LottieView
-            style={styles.check}
-            source={require('../../assets/lottieFiles/check.json')}
-            autoPlay
-            loop={false}
-          />
+          { isFinished && (
+            <LottieView
+              style={styles.check}
+              source={require('../../assets/lottieFiles/check.json')}
+              autoPlay
+              loop={false}
+            />
+          ) }
         </View>
-        <Text style={styles.title}>{this.props.title}...</Text>
+        <Text style={styles.title}>{title} { current } de {total}</Text>
       </View>
     );
   }
@@ -52,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SyncItem;
+export default SyncUploadItem;

@@ -5,10 +5,14 @@ import PropTypes from 'prop-types';
 
 export default class TextField extends Component {
   static propTypes = {
+    value: PropTypes.string, 
     placeholder: PropTypes.string,
-    value: PropTypes.string,
     secureTextEntry: PropTypes.bool, 
     keyboardType: PropTypes.string,
+  }
+
+  static defaultProps = {
+    value: "", 
   }
 
   render() {
@@ -19,7 +23,7 @@ export default class TextField extends Component {
         style={styles.textInput}
         placeholder={placeholder}
         placeholderTextColor={Colors.secondaryText}
-        value={value}
+        value={value.toString()}
         autoCapitalize={'none'}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
