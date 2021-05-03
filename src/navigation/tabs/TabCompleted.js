@@ -49,6 +49,7 @@ class TabCompleted extends React.Component {
                 underlayColor="transparent"
                 onPress={() => navigate('OrderDetail', item)}>
                   <OrderItem 
+                    button_title={""}
                     project_name={item.project_name}
                     order_number={item.order_number}
                     hours_by_vehicle={item.hours_by_vehicle}

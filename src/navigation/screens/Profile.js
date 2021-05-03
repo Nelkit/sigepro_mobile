@@ -9,6 +9,7 @@ import {
 import Colors from '../../core/colors';
 import AsyncStorage from '@react-native-community/async-storage';
 import Helpers from '../../core/helpers';
+import TextFont from '../../components/TextFont';
 import MaterialButton from '../../components/MaterialButton';
 import Divider from '../../components/Divider';
 import { dbPath } from '../../core/constants';
@@ -53,10 +54,19 @@ class Profile extends React.Component {
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.wrapper}>
             <View style={styles.boxHeader}>
+              <TextFont fontSize={18} fontWeight={'bold'}>Perfil de Usuario</TextFont>
               <Divider/>
               <MaterialButton
                 borderRadius={25}
-                title="CERRAR SESIÓN"
+                title="Sincronizar"
+                backgroundColor={Colors.successColor}
+                color={Colors.white}
+                onPress={()=>this.props.navigation.push('Sync')}
+              />
+              <Divider/>
+              <MaterialButton
+                borderRadius={25}
+                title="Cerrar Sesión"
                 backgroundColor={Colors.logoutColor}
                 color={Colors.white}
                 onPress={this.signOutAction}
