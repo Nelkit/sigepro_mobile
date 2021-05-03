@@ -7,69 +7,70 @@ import PropTypes from 'prop-types'
 import MaterialButton from '../MaterialButton';
 import Row from '../Row';
 import Col from '../Col';
+import EmptyBox from '../EmptyBox';
 import Colors from '../../core/colors';
 
 const Cell = ({ date, initial_hourmeter, final_hourmeter, hours }) => {
   return (
-    <Row>
-      <Col weight={1}>
-        <TextFont fontSize={16} paddingBottom={5} >{date}</TextFont>
-      </Col>
-      <Col weight={2}>
-        <TextFont fontSize={16} paddingBottom={5} >{initial_hourmeter}</TextFont>
-      </Col>
-      <Col weight={2}>
-        <TextFont fontSize={16} paddingBottom={5} >{final_hourmeter}</TextFont>
-      </Col>
-      <Col weight={1}>
-        <TextFont fontSize={16} paddingBottom={5} >{hours}</TextFont>
-      </Col>
-    </Row>
+    <CardLayout >   
+      <View style={styles.cellBody}>
+        <Row>
+          <Col weight={2}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Fecha</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{date}</TextFont>
+          </Col>
+          <Col weight={2} paddingLeft={3}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Horas</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{hours}</TextFont>
+          </Col>
+        </Row>
+        <Row>
+          <Col weight={2}>
+            <TextFont fontSize={16} fontWeight={'bold'}>H. Inicial</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{initial_hourmeter}</TextFont>
+          </Col>
+          <Col weight={2} paddingLeft={3}>
+            <TextFont fontSize={16} fontWeight={'bold'}>H. Final</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{final_hourmeter}</TextFont>
+          </Col>
+
+        </Row>
+      </View>   
+    </CardLayout>
   )
 };
 
 export default class TimeControlItem extends Component {
-  static propTypes = {
-    time_controls: PropTypes.object,
-    months: PropTypes.object,
-  }
 
   render() {
-    const {time_controls, months} = this.props;
+    const {time_controls} = this.props;
 
     return (
-      <CardLayout>
-        <View style={styles.cardBody}>
-          <Row>
-            <Col weight={1}>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Fecha</TextFont>
-            </Col>
-            <Col weight={2}>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>H. Inicial</TextFont>
-            </Col>
-            <Col weight={2}>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>H. Final</TextFont>
-            </Col>
-            <Col weight={1}>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Horas</TextFont>
-            </Col>
-          </Row>
-          <Divider />
-              {time_controls.map((item, i) => {   
-                  return (     
-                    <View key={i}>
-                      <Cell
-                        date={`${item.day} ${item.month} ${item.year}`}
-                        initial_hourmeter={item.initial_hourmeter}
-                        final_hourmeter={item.final_hourmeter}
-                        hours={item.hours}
-                      />
-                      <Divider />
-                    </View>
-                  )
-              })}
-        </View>
-        <View style={styles.cardFooter}>
+      <View style={styles.body}>
+        {time_controls.length > 0 ? 
+          (
+            <FlatList  
+              style={styles.flatList}
+              data={time_controls}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{paddingTop: 10}}
+              renderItem={({index, item}) => {
+                return (
+                  <Cell
+                    date={`${item.day} ${item.month} ${item.year}`}
+                    initial_hourmeter={item.initial_hourmeter}
+                    final_hourmeter={item.final_hourmeter}
+                    hours={item.hours}
+                  />
+                )
+              }}
+            />
+          ) : (
+            <EmptyBox title={'Todavia no se ha registrado ninguna hora de trabajo.'}  /> 
+          )
+        }
+
+        <View style={styles.containerButton}>
           <MaterialButton
             title="REGISTRAR HORAS"
             backgroundColor={Colors.successColor}
@@ -77,7 +78,7 @@ export default class TimeControlItem extends Component {
             height={56}
             paddingHorizontal={15}
             uppercase={true}
-            borderRadius={0}
+            borderRadius={28}
             onPress={this.props.onPress}
           >          
             <Image
@@ -86,23 +87,23 @@ export default class TimeControlItem extends Component {
               />
           </MaterialButton>
         </View>
-      </CardLayout>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  cardBody: {
+  body: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    paddingHorizontal: 15,
-    paddingVertical: 20,
   },
-  cardFooter: {
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    overflow: 'hidden'
+  cellBody:{
+    padding: 15,
+  },  
+  containerButton:{
+    marginTop: 10,
+    marginHorizontal: 15
   },
   icon: {
     width: 68,

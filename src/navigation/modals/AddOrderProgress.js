@@ -7,7 +7,7 @@ import Colors from '../../core/colors';
 import MaterialButton from '../../components/MaterialButton';
 import DialogLayout from '../../components/DialogLayout';
 import TextFont from '../../components/TextFont';
-import Dropdown from '../../components/Dropdown';
+import PickerField from '../../components/PickerField';
 import { Vehicle, VehicleDriver, OrderProgress, WorkOrder } from '../../models';
 import Helpers from '../../core/helpers'
 import { dbPath } from '../../core/constants';
@@ -32,7 +32,7 @@ class AddOrderProgress extends React.Component {
 
     var vehicles = []
     query.map(function(item){
-      vehicles.push({'label':item.title,'value':item.id, 'code':item.register_code})
+      vehicles.push({'label':item.title,'value':item.id, 'code':item.register_code,'subtitle':item.register_code})
     })
 
     this.setState({vehicleList: vehicles});
@@ -43,7 +43,7 @@ class AddOrderProgress extends React.Component {
 
     var vehicle_drivers = []
     query.map(function(item){
-      vehicle_drivers.push({'label':`${item.first_name} ${item.last_name}`,'value':item.identity})
+      vehicle_drivers.push({'label':`${item.first_name} ${item.last_name}`,'value':item.identity, 'subtitle':item.identity})
     })
 
     this.setState({vehicleDriverList: vehicle_drivers});
@@ -87,48 +87,45 @@ class AddOrderProgress extends React.Component {
     }
   }
 
-  onVehicleDropdownChange = (value) => {
-    let filterResults = this.state.vehicleList.filter(function (item) {
-      return item.value == value;
-    })
+  didVehicleSelected = (index) => {
+    
+    let selected = this.state.vehicleList[index]
 
-    if (filterResults.length > 0){
-      var selected  = filterResults[0]
+    if (selected){
       this.setState({selectedVehicle: selected})
     }
   }
 
-  onVehicleDriverDropdownChange = (value) => {
-    let filterResults = this.state.vehicleDriverList.filter(function (item) {
-      return item.value == value;
-    })
+  didVehicleDriverSelected = (index) => {
+    let selected = this.state.vehicleDriverList[index]
 
-    if (filterResults.length > 0){
-      var selected  = filterResults[0]
+    if (selected){
       this.setState({selectedVehicleDriver: selected})
     }
   }
 
   render() {
+    const {navigate} = this.props.navigation;
     const { params } = this.props.route
+    const { selectedVehicle, selectedVehicleDriver } = this.state
     console.log(params)
 
     return (
       <DialogLayout handleCloseModal={()=>this.props.navigation.goBack()}>
         <View>
           <TextFont fontSize={16} fontWeight={'bold'} paddingTop={10} paddingBottom={5}>Maquinaria</TextFont>
-          <Dropdown
-            onValueChange={this.onVehicleDropdownChange}
-            placeholder={{label: 'Selecciona la maquinaria', value: null}}
-            items={this.state.vehicleList}
+          <PickerField
+            onPress={() => navigate('PickerView', {title:'Selecciona la maquinaria', list: this.state.vehicleList, didSelected: this.didVehicleSelected})}
+            placeholder={'Selecciona la maquinaria'}
+            value={selectedVehicle.label}
           />
         </View>
         <View>
           <TextFont fontSize={16} fontWeight={'bold'} paddingTop={10} paddingBottom={5}>Operador</TextFont>
-          <Dropdown
-            onValueChange={this.onVehicleDriverDropdownChange}
-            placeholder={{label: 'Selecciona el operador', value: null}}
-            items={this.state.vehicleDriverList}
+          <PickerField
+            onPress={() => navigate('PickerView', {title:'Selecciona el operador', list: this.state.vehicleDriverList, didSelected: this.didVehicleDriverSelected})}
+            placeholder={'Selecciona el operador'}
+            value={selectedVehicleDriver.label}
           />
         </View>
         <View style={{paddingTop: 20}}>

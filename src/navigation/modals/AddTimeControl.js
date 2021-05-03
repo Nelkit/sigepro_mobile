@@ -20,8 +20,8 @@ class AddTimeControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      initial_hourmeter: 0,
-      final_hourmeter: 0,
+      initial_hourmeter: undefined,
+      final_hourmeter: undefined,
       hours: 0,
     };
 
@@ -68,14 +68,23 @@ class AddTimeControl extends React.Component {
     this.setState({initial_hourmeter: value})
     
     const { final_hourmeter } = this.state
-    this.setState({hours: parseInt(final_hourmeter) - parseInt(value)})
+    if (final_hourmeter && value) {
+      console.log(final_hourmeter)
+      this.setState({hours: parseInt(final_hourmeter) - parseInt(value)})
+    }else{
+      this.setState({hours: 0})
+    }
   }
 
   finalHourmeterOnChange = (value) => {
     this.setState({final_hourmeter: value})
     
     const { initial_hourmeter } = this.state
-    this.setState({hours: parseInt(value) - parseInt(initial_hourmeter)})
+    if (initial_hourmeter && value) {
+      this.setState({hours: parseInt(value) - parseInt(initial_hourmeter)})
+    }else{
+      this.setState({hours: 0})
+    }
   }
 
   render() {

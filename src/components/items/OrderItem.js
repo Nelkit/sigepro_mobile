@@ -9,12 +9,13 @@ import Colors from '../../core/colors'
 import Helpers from '../../core/helpers'
 import PropTypes from 'prop-types'
 
-export default class OrderAssignedItem extends Component {
+export default class OrderItem extends Component {
   constructor(props) {
     super(props);
   }
 
   static propTypes = {
+    button_title: PropTypes.string,
     project_name: PropTypes.string,
     order_number: PropTypes.string,
     distances_by_work: PropTypes.object,
@@ -23,6 +24,7 @@ export default class OrderAssignedItem extends Component {
   }
 
   static defaultProps = {
+    button_title: undefined,
     project_name: '',
     order_number: '',
     distances_by_work: [],
@@ -30,7 +32,7 @@ export default class OrderAssignedItem extends Component {
   }
 
   render() {
-    const {project_name, order_number, distances_by_work, hours_by_vehicle, date} = this.props;
+    const {button_title, project_name, order_number, distances_by_work, hours_by_vehicle, date} = this.props;
 
     return (
       <CardLayout>
@@ -75,15 +77,17 @@ export default class OrderAssignedItem extends Component {
               />
               <Text style={styles.datetext}>{Helpers.getDateFromNow(date)}</Text>
             </View>
-            <MaterialButton
-              title="Comenzar"
-              backgroundColor={Colors.primaryColor}
-              color={Colors.white}
-              height={35}
-              borderRadius={17.5}
-              paddingHorizontal={15}
-              uppercase={false}
-            />
+            {button_title.length > 0 &&(
+              <MaterialButton
+                title={button_title}
+                backgroundColor={Colors.primaryColor}
+                color={Colors.white}
+                height={35}
+                borderRadius={17.5}
+                paddingHorizontal={15}
+                uppercase={false}
+              />
+            )}
           </View>
         </View>
       </CardLayout>

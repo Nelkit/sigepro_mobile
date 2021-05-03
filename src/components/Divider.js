@@ -2,6 +2,9 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 class Divider extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
   render() {
     return (

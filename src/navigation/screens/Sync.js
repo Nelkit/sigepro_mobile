@@ -278,7 +278,7 @@ class Sync extends React.Component {
     return (
       <View>
         <StatusBar
-            barStyle="dark-content"
+            barStyle="light-content"
             backgroundColor={Colors.backgroundColor}
         />
         <ScrollView

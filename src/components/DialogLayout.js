@@ -28,15 +28,11 @@ class DialogLayout extends React.Component {
         />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.overlayView}>
-              <KeyboardAwareScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={styles.scrollView}>
                 <View style={styles.modalView}>
                     <View style={styles.modalBody}>
                       {this.props.children}
                     </View>
                 </View>
-              </KeyboardAwareScrollView>
           </View>
         </SafeAreaView>
       </>
@@ -49,10 +45,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   overlayView: {
+    flex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    paddingHorizontal:15,
   },
   modalView: {
     backgroundColor: Colors.background,
@@ -66,7 +64,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     width: '100%',
-    top: '50%'
   },
   scrollView: {
     paddingHorizontal: 15,

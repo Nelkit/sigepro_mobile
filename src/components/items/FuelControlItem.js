@@ -8,61 +8,63 @@ import MaterialButton from '../MaterialButton';
 import Row from '../Row';
 import Col from '../Col';
 import Colors from '../../core/colors';
+import EmptyBox from '../EmptyBox';
 
-const Cell = ({ day, quantity, price, hours }) => {
+const Cell = ({ date, quantity, price }) => {
   return (
-    <Row>
-      <Col weight={1}>
-        <TextFont fontSize={16} paddingBottom={5} >{day}</TextFont>
-      </Col>
-      <Col weight={1}>
-        <TextFont fontSize={16} paddingBottom={5} >{quantity}Gls</TextFont>
-      </Col>
-      <Col weight={1}>
-        <TextFont fontSize={16} paddingBottom={5} >L {price}</TextFont>
-      </Col>
-    </Row>
+    <CardLayout >   
+      <View style={styles.cellBody}>
+        <Row>
+          <Col weight={2}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Fecha</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{date}</TextFont>
+          </Col>
+          <Col weight={2} paddingLeft={3}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Cantidad</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{quantity}Gls</TextFont>
+          </Col>
+        </Row>
+        <Row>
+          <Col weight={1}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Precio</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >L {price}</TextFont>
+          </Col>
+        </Row>
+      </View>   
+    </CardLayout>
   )
 };
 
 export default class FuelControlItem extends Component {
-  static propTypes = {
-    fuel_controls: PropTypes.object,
-    months: PropTypes.object,
-  }
 
   render() {
-    const {fuel_controls, months} = this.props;
+    const { fuel_controls } = this.props;
 
     return (
-      <CardLayout>
-        <View style={styles.cardBody}>
-          <Row>
-            <Col>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Dia</TextFont>
-            </Col>
-            <Col>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Cantidad</TextFont>
-            </Col>
-            <Col>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Precio</TextFont>
-            </Col>
-          </Row>
-          <Divider />
-            {fuel_controls.map((item, i) => {      
-                return (     
-                  <View key={i}>
-                    <Cell
-                      day={item.day}
+      <View style={styles.body}>
+        {fuel_controls.length > 0 ? 
+          (
+            <FlatList  
+              style={styles.flatList}
+              data={fuel_controls}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{paddingTop: 10}}
+              renderItem={({index, item}) => {
+                return (
+                  <Cell
+                      date={`${item.day} ${item.month} ${item.year}`}
                       quantity={item.quantity}
                       price={item.price}
                       hours={item.hours}
                     />
-                    </View>
-                  )  
-            })}
-        </View>
-        <View style={styles.cardFooter}>
+                )
+              }}
+            />
+          ) : (
+            <EmptyBox title={'Todavia no se ha registrado ninguna carga de combustible.'}  /> 
+          )                 
+        }
+        <View style={styles.containerButton}>
           <MaterialButton
             title="REGISTRAR COMBUSTIBLE"
             backgroundColor={Colors.warningColor}
@@ -70,7 +72,7 @@ export default class FuelControlItem extends Component {
             height={56}
             paddingHorizontal={15}
             uppercase={true}
-            borderRadius={0}
+            borderRadius={28}
             onPress={this.props.onPress}
           >          
             <Image
@@ -79,23 +81,23 @@ export default class FuelControlItem extends Component {
               />
           </MaterialButton>
         </View>
-      </CardLayout>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  cardBody: {
+  body: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    paddingHorizontal: 15,
-    paddingVertical: 20,
   },
-  cardFooter: {
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    overflow: 'hidden'
+  cellBody:{
+    padding: 15,
+  },  
+  containerButton:{
+    marginTop: 10,
+    marginHorizontal: 15
   },
   icon: {
     width: 68,

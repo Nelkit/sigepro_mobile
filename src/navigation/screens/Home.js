@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
   Dimensions,
   StatusBar,
   StyleSheet,
+  Button,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import Colors from '../../core/colors';
@@ -27,6 +27,34 @@ class Home extends React.Component {
       {key: 'third', title: 'Terminadas'},
     ],
   };
+
+  componentDidMount = () =>{
+    const {navigation} = this.props;
+    const {navigate} = navigation;
+
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          style={styles.containerNavIcon}
+          onPress={() => {navigate("Profile")}}>
+          <Image
+            style={styles.navIcon}
+            source={require('../../assets/images/icons/ic_profile.png')}
+          />
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <TouchableOpacity
+          style={styles.containerNavIcon}
+          onPress={() => {console.log("Hola")}}>
+          <Image
+            style={styles.navIcon}
+            source={require('../../assets/images/icons/ic_bell.png')}
+          />
+        </TouchableOpacity>
+      ),
+    });
+  }
 
   render() {
     return (
@@ -53,7 +81,7 @@ class Home extends React.Component {
           renderTabBar={props => (
             <TabBar
               {...props}
-              indicatorStyle={{backgroundColor: Colors.accentColor}}
+              indicatorStyle={{backgroundColor: Colors.accentColor, height: 5}}
               style={{backgroundColor: Colors.secondaryColor}}
               scrollEnabled={false}
             />
@@ -77,6 +105,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     height: '100%',
   },
+  containerNavIcon:{
+    paddingHorizontal: 20
+  }, 
+  navIcon: {
+    height: 24,
+    width: 24
+  }
 });
 
 export default Home;

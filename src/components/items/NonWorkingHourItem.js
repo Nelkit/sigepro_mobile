@@ -8,60 +8,68 @@ import MaterialButton from '../MaterialButton';
 import Colors from '../../core/colors';
 import Row from '../Row';
 import Col from '../Col';
+import EmptyBox from '../EmptyBox';
 
-const Cell = ({ day, reason_str, hours }) => {
+const Cell = ({ date, reason_str, hours, observations }) => {
   return (
-    <Row>
-      <Col>
-        <TextFont fontSize={16} paddingBottom={5} >{day}</TextFont>
-      </Col>
-      <Col weight={3}>
-        <TextFont fontSize={16} paddingBottom={5} >{reason_str}</TextFont>
-      </Col>
-      <Col>
-        <TextFont fontSize={16} paddingBottom={5} >{hours}</TextFont>
-      </Col>
-    </Row>
+    <CardLayout >   
+      <View style={styles.cellBody}>
+        <Row>
+          <Col weight={2}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Fecha</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{date}</TextFont>
+          </Col>
+          <Col weight={2} paddingLeft={3}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Razón</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{reason_str}</TextFont>
+          </Col>
+          <Col weight={1} paddingLeft={3}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Horas</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{hours}</TextFont>
+          </Col>
+        </Row>
+        <Row>
+          <Col weight={1}>
+            <TextFont fontSize={16} fontWeight={'bold'}>Observación</TextFont>
+            <TextFont fontSize={16} paddingBottom={10} >{observations}</TextFont>
+          </Col>
+        </Row>
+      </View>   
+    </CardLayout>
+
   )
 };
 
 export default class NonWorkingHourItem extends Component {
-  static propTypes = {
-    non_working_hours: PropTypes.object,
-    months: PropTypes.object,
-  }
 
   render() {
-    const {non_working_hours, months} = this.props;
+    const {non_working_hours} = this.props;
 
     return (
-      <CardLayout>
-        <View style={styles.cardBody}>
-          <Row>
-            <Col>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Dia</TextFont>
-            </Col>
-            <Col weight={3}>
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Razón</TextFont>
-            </Col>
-            <Col >
-              <TextFont fontSize={16} paddingBottom={5} fontWeight={'bold'}>Horas</TextFont>
-            </Col>
-          </Row>
-          <Divider />
-              {non_working_hours.map((item, i) => {      
-                  return (     
-                    <View key={i}>
-                      <Cell
-                        day={item.day}
-                        reason_str={item.reason_str}
-                        hours={item.hours}
-                      />
-                      </View>
-                    )
-            })}
-        </View>
-        <View style={styles.cardFooter}>
+      <View style={styles.body}>
+        {non_working_hours.length > 0 ? 
+          (
+            <FlatList  
+              style={styles.flatList}
+              data={non_working_hours}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{paddingTop: 10}}
+              renderItem={({index, item}) => {
+                return (
+                  <Cell
+                    date={`${item.day} ${item.month} ${item.year}`}
+                    reason_str={item.reason_str}
+                    hours={item.hours}
+                    observations={item.observations}
+                  />
+                )
+              }}
+            />
+          ) : (
+            <EmptyBox title={'Todavia no se ha registrado ninguna hora inhabil.'}  /> 
+          )                 
+        }
+        <View style={styles.containerButton}>
           <MaterialButton
             title="REGISTRAR HORAS INHABILES"
             backgroundColor={Colors.dangerColor}
@@ -69,7 +77,7 @@ export default class NonWorkingHourItem extends Component {
             height={56}
             paddingHorizontal={15}
             uppercase={true}
-            borderRadius={0}
+            borderRadius={28}
             onPress={this.props.onPress}
           >          
             <Image
@@ -78,23 +86,23 @@ export default class NonWorkingHourItem extends Component {
               />
           </MaterialButton>
         </View>
-      </CardLayout>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  cardBody: {
+  body: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    paddingHorizontal: 15,
-    paddingVertical: 20,
   },
-  cardFooter: {
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    overflow: 'hidden'
+  cellBody:{
+    padding: 15,
+  },  
+  containerButton:{
+    marginTop: 10,
+    marginHorizontal: 15
   },
   icon: {
     width: 68,

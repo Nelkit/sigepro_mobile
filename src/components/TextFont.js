@@ -8,6 +8,7 @@ class TextFont extends React.Component {
     fontSize: PropTypes.number,
     paddingTop: PropTypes.number,
     paddingBottom: PropTypes.number,
+    color: PropTypes.string,
   }
 
   static defaultProps = {
@@ -16,9 +17,9 @@ class TextFont extends React.Component {
   }
 
   render() {
-    const {fontSize, fontWeight, paddingTop, paddingBottom} = this.props;
+    const {fontSize, fontWeight, paddingTop, paddingBottom, color} = this.props;
     
-    return <Text style={{fontSize: fontSize, fontWeight: fontWeight, paddingTop: paddingTop, paddingBottom: paddingBottom}}>{this.props.children}</Text>;
+    return <Text style={{fontSize: fontSize, fontWeight: fontWeight, paddingTop: paddingTop, paddingBottom: paddingBottom, color: color}}>{this.props.children}</Text>;
   }
 }
 

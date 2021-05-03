@@ -20,9 +20,9 @@ class AddFuelControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: 0,
-      price: 0.0,
-      hourmeter: 0,
+      quantity: undefined,
+      price: undefined,
+      hourmeter: undefined,
     };
 
     realm = new Realm({path: dbPath});

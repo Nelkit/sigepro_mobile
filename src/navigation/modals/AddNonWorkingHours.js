@@ -6,9 +6,10 @@ import {
 import Colors from '../../core/colors';
 import Helpers from '../../core/helpers';
 import TextField from '../../components/TextField';
+import TextBox from '../../components/TextBox';
 import MaterialButton from '../../components/MaterialButton';
 import ModalLayout from '../../components/ModalLayout';
-import Dropdown from '../../components/Dropdown';
+import PickerField from '../../components/PickerField';
 import TextFont from '../../components/TextFont';
 import { dbPath } from '../../core/constants';
 import moment from 'moment';
@@ -21,8 +22,8 @@ class AddNonWorkingHours extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      reason: '',
-      hours: 0,
+      reasonSelected: {},
+      hours: undefined,
       observations: '',
       reasonList: [
         {value:'D.M', label: 'Desperfectos Mecanicos'},
@@ -38,7 +39,7 @@ class AddNonWorkingHours extends React.Component {
 
   saveNewNonWorkingHours = () => {
     const { params } = this.props.route
-    const { reason, hours, observations, reasonList} = this.state
+    const { reasonSelected, hours, observations} = this.state
 
     var nextID = Helpers.nextID(NonWorkingHours.name)
     const orderProgress = realm.objectForPrimaryKey(OrderProgress.name, params.id);
@@ -47,12 +48,6 @@ class AddNonWorkingHours extends React.Component {
     var day = parseInt(moment().format('D'));
     var year = String(today.getFullYear());
     var month = Helpers.capitalizeFirstLetter(moment().format('MMMM'));
-    var reason_str = ""
-
-    var reasonFiltered = reasonList.filter((item)=>{ return item.value == reason  })
-    if (reasonFiltered.length > 0){
-      reason_str = reasonFiltered[0].label
-    }
 
     var newNonWorkingHours = {
       id: nextID,
@@ -60,8 +55,8 @@ class AddNonWorkingHours extends React.Component {
       day: day,
       month: month,
       year: year,
-      reason: reason,
-      reason_str: reason_str,
+      reason: reasonSelected.value,
+      reason_str: reasonSelected.label,
       observations: observations,
       hours: parseInt(hours),
       isUploaded: false,
@@ -79,34 +74,44 @@ class AddNonWorkingHours extends React.Component {
         
   }
 
+  didReasonSelected = (index) => {
+    let selected = this.state.reasonList[index]
+
+    if (selected){
+      this.setState({reasonSelected: selected})
+    }
+  }
+
   render() {
+    const {navigate} = this.props.navigation;
     const { params } = this.props.route
+    const { reasonList, reasonSelected, hours, observations } = this.state;
     console.log(params)
 
     return (
       <ModalLayout title={'Registar Horas Inhabiles'} handleCloseModal={()=>this.props.navigation.goBack()}>
         <View>
           <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Razón</TextFont>
-          <Dropdown
-            onValueChange={ reason => this.setState({reason}) }
-            placeholder={{label: 'Selecciona la razón', value: null}}
-            items={this.state.reasonList}
+          <PickerField
+            onPress={() => navigate('PickerView', {title:'Selecciona la razón', list: reasonList, didSelected: this.didReasonSelected})}
+            placeholder={'Selecciona la maquinaria'}
+            value={reasonSelected.label}
           />
         </View>
         <View>
           <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Horas</TextFont>
           <TextField
             onChangeText={hours => this.setState({hours})}
-            value={this.state.hours}
+            value={hours}
             placeholder="Ingrese Horas"
             keyboardType={'numeric'}
           />
         </View>
         <View>
           <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Observaciones</TextFont>
-          <TextField
+          <TextBox
             onChangeText={observations => this.setState({observations})}
-            value={this.state.observations}
+            value={observations}
             placeholder="Ingrese observaciones por la cual existio horas inhabiles"
           />
         </View>

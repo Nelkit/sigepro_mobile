@@ -5,12 +5,13 @@ import {
   StatusBar,
   StyleSheet,
   FlatList,
+  View,
 } from 'react-native';
 import Colors from '../../core/colors';
 import Realm from 'realm';
 import { dbPath } from '../../core/constants';
 import { WorkOrder } from '../../models';
-import OrderAssignedItem from '../../components/items/OrderAssignedItem'
+import OrderItem from '../../components/items/OrderItem'
 let realm;
 
 class TabAssigned extends React.Component {
@@ -23,7 +24,7 @@ class TabAssigned extends React.Component {
   }
 
   getWorkOrders(){
-    let query = realm.objects(WorkOrder.name);
+    let query = realm.objects(WorkOrder.name).filtered(`status='assigned'`);
     this.setState({workOrderList: query});
   }
 
@@ -35,34 +36,26 @@ class TabAssigned extends React.Component {
     const {navigate} = this.props.navigation;
     
     return (
-      <SafeAreaView>
-        <StatusBar
-            barStyle="light-content"
-            backgroundColor={Colors.backgroundColor}
-        />
+      <View style={styles.container}>
         <FlatList
-          style={styles.flatList}
-          data={this.state.workOrderList}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{paddingBottom: 5}}
-          renderItem={({index, item}) => {
-            return (
-              <TouchableHighlight
-              style={styles.boxSelect}
-              underlayColor="transparent"
-              onPress={() => navigate('OrderDetail', item)}>
-                <OrderAssignedItem 
-                  project_name={item.project_name}
-                  order_number={item.order_number}
-                  hours_by_vehicle={item.hours_by_vehicle}
-                  distances_by_work={item.distances_by_work}
-                  date={item.created_date}
-                />
-              </TouchableHighlight>
-            );
-          }}
+            style={styles.flatList}
+            data={this.state.workOrderList}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{paddingBottom: 20}}
+            renderItem={({index, item}) => {
+              return (
+                  <OrderItem
+                    button_title={"Comenzar"} 
+                    project_name={item.project_name}
+                    order_number={item.order_number}
+                    hours_by_vehicle={item.hours_by_vehicle}
+                    distances_by_work={item.distances_by_work}
+                    date={item.created_date}
+                  />
+              );
+            }}
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }
@@ -70,15 +63,10 @@ class TabAssigned extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  section: {
-    paddingBottom: 22,
-  },
-  scene: {
-    backgroundColor: "#ffffff",
     height: '100%',
   },
   flatList: {
+    paddingVertical: 10,
     height: '100%',
   }
 });

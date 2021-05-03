@@ -7,12 +7,14 @@ export default {
     var formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
-
+    console.log(email, password)
+    
     const options = {
       method: 'POST',
       body: formData,
       headers: {
-          'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data'
       },
     };
 
@@ -91,7 +93,8 @@ export default {
       method: 'POST',
       body: formData,
       headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
       },
     };
@@ -129,7 +132,8 @@ export default {
       method: 'POST',
       body: formData,
       headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
       },
     };
@@ -163,7 +167,8 @@ export default {
       method: 'POST',
       body: formData,
       headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
       },
     };
@@ -199,7 +204,8 @@ export default {
       method: 'POST',
       body: formData,
       headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
       },
     };

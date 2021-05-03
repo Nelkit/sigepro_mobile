@@ -34,7 +34,7 @@ class Login extends React.Component {
     this.setState({isLoading: true});
     this.setState({disabled: true});
     this.setState({errorLogin: false});
-    const {navigate} = this.props.navigation;
+    const {navigate, push} = this.props.navigation;
 
     var login = requests.doLogin(
       this.state.username, 
@@ -43,7 +43,7 @@ class Login extends React.Component {
 
     login.then(response => {
       Helpers.storeData('token',response.access_token)
-      navigate('Root');
+      push('Root');
     }).catch(error => {
       this.setState({errorLogin: true});
       console.log("RESPUESTA FALLIDA", error)
@@ -57,8 +57,8 @@ class Login extends React.Component {
     return (
       <>
         <StatusBar
-          barStyle="dark-content"
-          backgroundColor={Colors.backgroundColor}
+            barStyle="light-content"
+            backgroundColor={Colors.backgroundColor}
         />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.wrapper}>

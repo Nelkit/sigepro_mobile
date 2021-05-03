@@ -8,11 +8,14 @@ import {
   FlatList,
   ScrollView,
   LogBox,
-  Image
+  Image,
+  Dimensions
 } from 'react-native';
+import {TabView, TabBar} from 'react-native-tab-view';
 import Colors from '../../core/colors';
 import TextFont from '../../components/TextFont';
 import Divider from '../../components/Divider';
+import EmptyBox from '../../components/EmptyBox';
 import MaterialButton from '../../components/MaterialButton';
 import TimeControlItem from '../../components/items/TimeControlItem'
 import FuelControlItem from '../../components/items/FuelControlItem'
@@ -29,6 +32,12 @@ class OrderProgress extends React.Component {
       time_controls: [],
       fuel_controls: [],
       non_working_hours: [],
+      index: 0,
+      routes: [
+        {key: 'first', title: 'Horas'},
+        {key: 'second', title: 'Combustible'},
+        {key: 'third', title: 'Horas inhabiles'},
+      ],
     };
 
     realm = new Realm({path: dbPath});    
@@ -66,7 +75,7 @@ class OrderProgress extends React.Component {
     const { params } = this.props.route
     const { time_controls, fuel_controls, non_working_hours } = this.state;
     console.log(params)
-    const {id, vehicle_name, vehicle_driver_name, months} = params;
+    const {id, vehicle_name, vehicle_driver_name } = params;
 
     return (
       <>
@@ -83,76 +92,51 @@ class OrderProgress extends React.Component {
             <TextFont fontSize={18}>
               <TextFont fontWeight={'bold'} style={styles.textbold}>Operador: </TextFont>{vehicle_driver_name}
             </TextFont>
+            <View style={styles.divider} />
           </View>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-              {/* TimeControl */}
-              {time_controls.length === 0 ? (
-                <View style={styles.containerButton}>
-                  <MaterialButton
-                    title="REGISTRAR HORAS"
-                    backgroundColor={Colors.successColor}
-                    color={Colors.white}
-                    height={120}
-                    borderRadius={25}
-                    uppercase={true}
-                    onPress={()=>{navigate('AddTimeControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
-                  >          
-                    <Image
-                      style={styles.icon}
-                      source={require('../../assets/images/icons/ic_clock.png')}
-                      />
-                  </MaterialButton>
-                </View>
-              ):(
-                <TimeControlItem time_controls={time_controls} months={months} onPress={()=>{navigate('AddTimeControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}/>
-              )}
-
-              {/* FuelControl */}
-              {fuel_controls.length === 0 ? (
-                <View style={styles.containerButton}>
-                  <MaterialButton
-                    title="REGISTRAR COMBUSTIBLE"
-                    backgroundColor={Colors.warningColor}
-                    color={Colors.white}
-                    height={120}
-                    borderRadius={25}
-                    uppercase={true}
-                    onPress={()=>{navigate('AddFuelControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
-                  >          
-                    <Image
-                      style={styles.icon}
-                      source={require('../../assets/images/icons/ic_fuel.png')}
-                      />
-                  </MaterialButton>
-                </View>
-              ):(
-                <FuelControlItem fuel_controls={fuel_controls} months={months} onPress={()=>{navigate('AddFuelControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}/>
-              )}
-
-              {/* NonWorkingHours */}
-              {non_working_hours.length === 0 ? (
-                <View style={styles.containerButton}>
-                  <MaterialButton
-                    title="REGISTRAR HORAS INHABILES"
-                    backgroundColor={Colors.dangerColor}
-                    color={Colors.white}
-                    height={120}
-                    borderRadius={25}
-                    uppercase={true}
-                    onPress={()=>{navigate('AddNonWorkingHours', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
-                  >          
-                    <Image
-                      style={styles.icon}
-                      source={require('../../assets/images/icons/ic_non_working.png')}
-                      />
-                  </MaterialButton>
-                </View>
-              ):(
-                <NonWorkingHourItem non_working_hours={non_working_hours} months={months} onPress={()=>{navigate('AddNonWorkingHours', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}/>
-              )}
-          </ScrollView>
+          <TabView
+            swipeEnabled={true}
+            navigationState={this.state}
+            renderScene={({route}) => {
+              switch (route.key) {
+                case 'first':
+                  return (
+                    <TimeControlItem 
+                      time_controls={time_controls} 
+                      onPress={()=>{navigate('AddTimeControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
+                    />
+                  )
+                case 'second':
+                  return( 
+                    <FuelControlItem 
+                      fuel_controls={fuel_controls}
+                      onPress={()=>{navigate('AddFuelControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
+                    />
+                  )
+                case 'third':
+                  return (
+                    <NonWorkingHourItem 
+                      non_working_hours={non_working_hours} 
+                      onPress={()=>{navigate('AddNonWorkingHours', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
+                    />
+                  );
+                default:
+                  return null;
+              }
+            }}
+            renderTabBar={props => (
+              <TabBar
+                {...props}
+                activeColor={Colors.primaryColor}
+                inactiveColor={Colors.secondaryText}
+                indicatorStyle={{backgroundColor: Colors.secondaryColor, height: 5}}
+                style={{backgroundColor: Colors.white}}
+                scrollEnabled={false}
+              />
+            )}
+            onIndexChange={index => this.setState({index})}
+            initialLayout={{width: Dimensions.get('window').width}}
+          />
         </View>
       </>
     );
@@ -169,12 +153,8 @@ const styles = StyleSheet.create({
   },
   boxHeader: {
     backgroundColor: Colors.white,
-    padding: 20,
-    shadowColor: 'rgba(0,0,0,0.3)',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 2,
+    paddingHorizontal: 20,
+    paddingTop: 20,
     zIndex: 2,
   },
   icon: {
@@ -185,6 +165,12 @@ const styles = StyleSheet.create({
   containerButton:{
     marginHorizontal: 15,
     marginTop: 20,
+  },
+  divider: {
+    marginTop: 15,
+    backgroundColor: "#F2F2F2",
+    height: 2,
+    width: "100%"
   }
 });
 
