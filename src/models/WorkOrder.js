@@ -15,5 +15,6 @@ export const WorkOrder = {
     order_progress: 'OrderProgress[]',
     created_date: 'date',
     modified_date: 'date',
+    has_changes: { type: 'bool', default: false },
   },
 };

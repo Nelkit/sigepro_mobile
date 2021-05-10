@@ -9,10 +9,14 @@ import Row from '../Row';
 import Col from '../Col';
 import EmptyBox from '../EmptyBox';
 import Colors from '../../core/colors';
+import StatusPill from '../StatusPill'
 
-const Cell = ({ date, initial_hourmeter, final_hourmeter, hours }) => {
+const Cell = ({ date, initial_hourmeter, final_hourmeter, hours, is_uploaded }) => {
   return (
-    <CardLayout >   
+    <CardLayout >  
+      <View style={styles.pillContainer} >
+        <StatusPill isUploaded={is_uploaded} />
+      </View> 
       <View style={styles.cellBody}>
         <Row>
           <Col weight={2}>
@@ -43,50 +47,47 @@ const Cell = ({ date, initial_hourmeter, final_hourmeter, hours }) => {
 export default class TimeControlItem extends Component {
 
   render() {
-    const {time_controls} = this.props;
+    const {time_controls, order_status} = this.props;
 
     return (
       <View style={styles.body}>
-        {time_controls.length > 0 ? 
-          (
-            <FlatList  
-              style={styles.flatList}
-              data={time_controls}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{paddingTop: 10}}
-              renderItem={({index, item}) => {
-                return (
-                  <Cell
-                    date={`${item.day} ${item.month} ${item.year}`}
-                    initial_hourmeter={item.initial_hourmeter}
-                    final_hourmeter={item.final_hourmeter}
-                    hours={item.hours}
-                  />
-                )
-              }}
-            />
-          ) : (
-            <EmptyBox title={'Todavia no se ha registrado ninguna hora de trabajo.'}  /> 
-          )
-        }
-
-        <View style={styles.containerButton}>
-          <MaterialButton
-            title="REGISTRAR HORAS"
-            backgroundColor={Colors.successColor}
-            color={Colors.white}
-            height={56}
-            paddingHorizontal={15}
-            uppercase={true}
-            borderRadius={28}
-            onPress={this.props.onPress}
-          >          
-            <Image
-              style={styles.icon}
-              source={require('../../assets/images/icons/ic_clock.png')}
+        <FlatList  
+          style={styles.flatList}
+          data={time_controls}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={<EmptyBox title={'Todavia no se ha registrado ninguna hora de trabajo.'}  /> }
+          contentContainerStyle={time_controls.length === 0 ? styles.centerEmptySet : {paddingTop: 10}}
+          renderItem={({index, item}) => {
+            return (
+              <Cell
+                date={`${item.day} ${item.month} ${item.year}`}
+                initial_hourmeter={item.initial_hourmeter}
+                final_hourmeter={item.final_hourmeter}
+                hours={item.hours}
+                is_uploaded={item.is_uploaded}
               />
-          </MaterialButton>
-        </View>
+            )
+          }}
+        />
+        {order_status != 'completed' &&        
+          <View style={styles.containerButton}>
+            <MaterialButton
+              title="REGISTRAR HORAS"
+              backgroundColor={Colors.successColor}
+              color={Colors.white}
+              height={56}
+              paddingHorizontal={15}
+              uppercase={true}
+              borderRadius={28}
+              onPress={this.props.onPress}
+            >          
+              <Image
+                style={styles.icon}
+                source={require('../../assets/images/icons/ic_clock.png')}
+                />
+            </MaterialButton>
+          </View>
+        }
       </View>
     );
   }
@@ -98,9 +99,18 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
   },
+  flatList:{
+    height: '100%'
+  },
+  centerEmptySet: { 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100%'
+  },
   cellBody:{
-    padding: 15,
-  },  
+    paddingHorizontal: 25,
+    paddingVertical: 25,
+  }, 
   containerButton:{
     marginTop: 10,
     marginHorizontal: 15
@@ -118,5 +128,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
+  },
+  pillContainer:{
+    position: 'absolute',
+    right: 0,
+    top: 0,
   }
 });

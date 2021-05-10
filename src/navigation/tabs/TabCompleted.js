@@ -4,14 +4,17 @@ import {
   TouchableHighlight,
   StatusBar,
   StyleSheet,
-  FlatList,
+  SectionList,
   View,
 } from 'react-native';
+import Helpers from '../../core/helpers';
 import Colors from '../../core/colors';
 import Realm from 'realm';
 import { dbPath } from '../../core/constants';
 import { WorkOrder } from '../../models';
 import OrderItem from '../../components/items/OrderItem'
+import OrderHeader from '../../components/headers/OrderHeader';
+import EmptyBox from '../../components/EmptyBox';
 let realm;
 
 class TabCompleted extends React.Component {
@@ -24,8 +27,10 @@ class TabCompleted extends React.Component {
   }
 
   getWorkOrders(){
-    let query = realm.objects(WorkOrder.name).filtered(`status='completed'`);
-    this.setState({workOrderList: query});
+    let orders = realm.objects(WorkOrder.name).filtered(`status='completed'`);
+
+    const grouped = Helpers.groupBy(orders, 'project_name');
+    this.setState({workOrderList: grouped});
   }
 
   componentDidMount() {
@@ -34,31 +39,38 @@ class TabCompleted extends React.Component {
 
   render() {
     const {navigate} = this.props.navigation;
+    const {workOrderList} = this.state;
     
     return (
       <View style={styles.container}>
-        <FlatList
-            style={styles.flatList}
-            data={this.state.workOrderList}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{paddingBottom: 20}}
-            renderItem={({index, item}) => {
-              return (
-                <TouchableHighlight
-                style={styles.boxSelect}
-                underlayColor="transparent"
-                onPress={() => navigate('OrderDetail', item)}>
-                  <OrderItem 
-                    button_title={""}
-                    project_name={item.project_name}
-                    order_number={item.order_number}
-                    hours_by_vehicle={item.hours_by_vehicle}
-                    distances_by_work={item.distances_by_work}
-                    date={item.created_date}
-                  />
-                </TouchableHighlight>
-              );
-            }}
+        <SectionList
+          sections={workOrderList}
+          keyExtractor={(item, index) => item + index}
+          renderSectionHeader={({ section: { title } }) => (
+            <OrderHeader projectName={title} />
+          )}
+          stickySectionHeadersEnabled={true}
+          contentContainerStyle={workOrderList.length === 0 ? styles.centerEmptySet : {paddingBottom: 20}}
+          ListEmptyComponent={ <EmptyBox title={"Sin ordenes completadas"} />}
+          SectionSeparatorComponent={()=><View style={{height: 10}} />}
+          renderItem={({index, item}) => {
+            return (
+              <TouchableHighlight
+              style={styles.boxSelect}
+              underlayColor="transparent"
+              onPress={() => navigate('OrderDetail', item)}>
+                <OrderItem 
+                  buttonTitle={""}
+                  didPressButton={() => {}}
+                  orderNumber={item.order_number}
+                  hoursByVehicle={item.hours_by_vehicle}
+                  distancesByWork={item.distances_by_work}
+                  date={item.created_date}
+                  isUploaded={!item.has_changes}
+                />
+              </TouchableHighlight>
+            );
+          }}
         />
       </View>
     );
@@ -73,7 +85,12 @@ const styles = StyleSheet.create({
   flatList: {
     paddingVertical: 10,
     height: '100%',
-  }
+  },
+  centerEmptySet: { 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100%'
+  }, 
 });
 
 export default TabCompleted;

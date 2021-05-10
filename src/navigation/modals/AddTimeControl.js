@@ -7,6 +7,7 @@ import Colors from '../../core/colors';
 import Helpers from '../../core/helpers';
 import TextField from '../../components/TextField';
 import MaterialButton from '../../components/MaterialButton';
+import ErrorMessage from '../../components/ErrorMessage';
 import ModalLayout from '../../components/ModalLayout';
 import TextFont from '../../components/TextFont';
 import { dbPath } from '../../core/constants';
@@ -23,6 +24,7 @@ class AddTimeControl extends React.Component {
       initial_hourmeter: undefined,
       final_hourmeter: undefined,
       hours: 0,
+      errorMessage: "",
     };
 
     realm = new Realm({path: dbPath});
@@ -31,6 +33,16 @@ class AddTimeControl extends React.Component {
   saveNewTimeControl = () => {
     const { params } = this.props.route
     const { initial_hourmeter, final_hourmeter } = this.state
+
+    if (initial_hourmeter == undefined){
+      this.setState({errorMessage: "Asegurese que ingreso el horometro inicial"})
+      return 
+    }
+
+    if (final_hourmeter == undefined ){
+      this.setState({errorMessage: "Asegurese que ingreso el horometro final"})
+      return 
+    }
     
     var nextID = Helpers.nextID(TimeControl.name)
     const orderProgress = realm.objectForPrimaryKey(OrderProgress.name, params.id);
@@ -41,6 +53,11 @@ class AddTimeControl extends React.Component {
     var month = Helpers.capitalizeFirstLetter(moment().format('MMMM'));
     
     var hours = final_hourmeter - initial_hourmeter
+    if (hours <= 0 || isNaN(parseInt(hours))){
+      this.setState({errorMessage: "No se puede ingresar un horometro final menor que el inicial"})
+      return
+    }
+
     var newTimeControl = {
       id: nextID,
       project_progress: params.id,
@@ -50,7 +67,7 @@ class AddTimeControl extends React.Component {
       initial_hourmeter: parseInt(initial_hourmeter),
       hours: parseInt(hours),
       final_hourmeter: parseInt(final_hourmeter),
-      isUploaded: false,
+      is_uploaded: false,
     }
 
     if (orderProgress){
@@ -65,6 +82,7 @@ class AddTimeControl extends React.Component {
   }
 
   initialHourmeterOnChange = (value) => {
+    this.setState({errorMessage: ""})
     this.setState({initial_hourmeter: value})
     
     const { final_hourmeter } = this.state
@@ -77,6 +95,7 @@ class AddTimeControl extends React.Component {
   }
 
   finalHourmeterOnChange = (value) => {
+    this.setState({errorMessage: ""})
     this.setState({final_hourmeter: value})
     
     const { initial_hourmeter } = this.state
@@ -89,7 +108,7 @@ class AddTimeControl extends React.Component {
 
   render() {
     const { params } = this.props.route
-    console.log(params)
+    const { errorMessage } = this.state
 
     return (
       <ModalLayout title={'Registar Horas de Trabajo'} handleCloseModal={()=>this.props.navigation.goBack()}>
@@ -114,6 +133,11 @@ class AddTimeControl extends React.Component {
         <View>
           <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Total de horas trabajadas</TextFont>
           <TextFont fontSize={16} paddingBottom={5}>{this.state.hours}Hrs</TextFont>
+        </View>
+        <View>
+          {errorMessage.length > 0 &&(
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+          )}
         </View>
         <View style={{paddingTop: 20}}>
           <MaterialButton

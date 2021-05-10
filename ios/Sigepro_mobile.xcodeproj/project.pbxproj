@@ -163,8 +163,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				7B7669266EAAC29CA584205A /* [CP] Embed Pods Frameworks */,
 				8440FDA274F75EE281178326 /* [CP] Copy Pods Resources */,
+				577158A9D7557BBB6C9E58BA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -186,8 +186,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				9D499BDA47C46BF6FC5F7725 /* [CP] Embed Pods Frameworks */,
 				02391CAD3C7F634D7F7B9F46 /* [CP] Copy Pods Resources */,
+				B5C90CFD57CE35884EEC2F27 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -285,7 +285,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sigepro_mobile/Pods-Sigepro_mobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7B7669266EAAC29CA584205A /* [CP] Embed Pods Frameworks */ = {
+		577158A9D7557BBB6C9E58BA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -319,7 +319,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sigepro_mobile-Sigepro_mobileTests/Pods-Sigepro_mobile-Sigepro_mobileTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9D499BDA47C46BF6FC5F7725 /* [CP] Embed Pods Frameworks */ = {
+		B5C90CFD57CE35884EEC2F27 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

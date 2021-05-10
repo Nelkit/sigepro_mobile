@@ -43,6 +43,29 @@ export default {
       throw error
     }
   },
+  async updateWorkOrderStatus(id, new_status) {
+    const token = await AsyncStorage.getItem('token');
+
+    var formData = new FormData();
+    formData.append('status', new_status);
+
+    const options = {
+      method: 'PATCH',
+      body: formData,
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+      },
+    };
+
+    try {
+      var response = await fetchJSON(`${urlApi}/api/mobile/work_orders/${id}/`, options)
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
   async getVehicles() {
     const token = await AsyncStorage.getItem('token');
 

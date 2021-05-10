@@ -9,10 +9,14 @@ import Row from '../Row';
 import Col from '../Col';
 import Colors from '../../core/colors';
 import EmptyBox from '../EmptyBox';
+import StatusPill from '../StatusPill'
 
-const Cell = ({ date, quantity, price }) => {
+const Cell = ({ date, quantity, price, is_uploaded }) => {
   return (
     <CardLayout >   
+      <View style={styles.pillContainer} >
+        <StatusPill isUploaded={is_uploaded} />
+      </View>
       <View style={styles.cellBody}>
         <Row>
           <Col weight={2}>
@@ -38,33 +42,30 @@ const Cell = ({ date, quantity, price }) => {
 export default class FuelControlItem extends Component {
 
   render() {
-    const { fuel_controls } = this.props;
+    const { fuel_controls, order_status } = this.props;
 
     return (
       <View style={styles.body}>
-        {fuel_controls.length > 0 ? 
-          (
-            <FlatList  
-              style={styles.flatList}
-              data={fuel_controls}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{paddingTop: 10}}
-              renderItem={({index, item}) => {
-                return (
-                  <Cell
-                      date={`${item.day} ${item.month} ${item.year}`}
-                      quantity={item.quantity}
-                      price={item.price}
-                      hours={item.hours}
-                    />
-                )
-              }}
-            />
-          ) : (
-            <EmptyBox title={'Todavia no se ha registrado ninguna carga de combustible.'}  /> 
-          )                 
-        }
-        <View style={styles.containerButton}>
+        <FlatList  
+          style={styles.flatList}
+          data={fuel_controls}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={<EmptyBox title={'Todavia no se ha registrado ninguna carga de combustible.'}  />  }
+          contentContainerStyle={fuel_controls.length === 0 ? styles.centerEmptySet : {paddingTop: 10}}
+          renderItem={({index, item}) => {
+            return (
+              <Cell
+                  date={`${item.day} ${item.month} ${item.year}`}
+                  quantity={item.quantity}
+                  price={item.price}
+                  hours={item.hours}
+                  is_uploaded={item.is_uploaded}
+                />
+            )
+          }}
+        />              
+        {order_status != 'completed' && (
+          <View style={styles.containerButton}>
           <MaterialButton
             title="REGISTRAR COMBUSTIBLE"
             backgroundColor={Colors.warningColor}
@@ -81,6 +82,7 @@ export default class FuelControlItem extends Component {
               />
           </MaterialButton>
         </View>
+        )}
       </View>
     );
   }
@@ -93,8 +95,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   cellBody:{
-    padding: 15,
-  },  
+    paddingHorizontal: 25,
+    paddingVertical: 25,
+  }, 
+  flatList:{
+    height: '100%'
+  },
+  centerEmptySet: { 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100%'
+  },
   containerButton:{
     marginTop: 10,
     marginHorizontal: 15
@@ -112,5 +123,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
+  },
+  pillContainer:{
+    position: 'absolute',
+    right: 0,
+    top: 0,
   }
 });

@@ -9,10 +9,14 @@ import Colors from '../../core/colors';
 import Row from '../Row';
 import Col from '../Col';
 import EmptyBox from '../EmptyBox';
+import StatusPill from '../StatusPill'
 
-const Cell = ({ date, reason_str, hours, observations }) => {
+const Cell = ({ date, reason_str, hours, observations, is_uploaded }) => {
   return (
-    <CardLayout >   
+    <CardLayout >  
+      <View style={styles.pillContainer} >
+        <StatusPill isUploaded={is_uploaded} />
+      </View> 
       <View style={styles.cellBody}>
         <Row>
           <Col weight={2}>
@@ -43,49 +47,47 @@ const Cell = ({ date, reason_str, hours, observations }) => {
 export default class NonWorkingHourItem extends Component {
 
   render() {
-    const {non_working_hours} = this.props;
+    const {non_working_hours, order_status} = this.props;
 
     return (
       <View style={styles.body}>
-        {non_working_hours.length > 0 ? 
-          (
-            <FlatList  
-              style={styles.flatList}
-              data={non_working_hours}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{paddingTop: 10}}
-              renderItem={({index, item}) => {
-                return (
-                  <Cell
-                    date={`${item.day} ${item.month} ${item.year}`}
-                    reason_str={item.reason_str}
-                    hours={item.hours}
-                    observations={item.observations}
-                  />
-                )
-              }}
-            />
-          ) : (
-            <EmptyBox title={'Todavia no se ha registrado ninguna hora inhabil.'}  /> 
-          )                 
-        }
-        <View style={styles.containerButton}>
-          <MaterialButton
-            title="REGISTRAR HORAS INHABILES"
-            backgroundColor={Colors.dangerColor}
-            color={Colors.white}
-            height={56}
-            paddingHorizontal={15}
-            uppercase={true}
-            borderRadius={28}
-            onPress={this.props.onPress}
-          >          
-            <Image
-              style={styles.icon}
-              source={require('../../assets/images/icons/ic_non_working.png')}
+        <FlatList  
+          style={styles.flatList}
+          data={non_working_hours}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={ <EmptyBox title={'Todavia no se ha registrado ninguna hora inhabil.'}  />  }
+          contentContainerStyle={non_working_hours.length === 0 ? styles.centerEmptySet : {paddingTop: 10}}
+          renderItem={({index, item}) => {
+            return (
+              <Cell
+                date={`${item.day} ${item.month} ${item.year}`}
+                reason_str={item.reason_str}
+                hours={item.hours}
+                observations={item.observations}
+                is_uploaded={item.is_uploaded}
               />
-          </MaterialButton>
-        </View>
+            )
+          }}
+        />
+        {order_status != 'completed' && (
+          <View style={styles.containerButton}>
+            <MaterialButton
+              title="REGISTRAR HORAS INHABILES"
+              backgroundColor={Colors.dangerColor}
+              color={Colors.white}
+              height={56}
+              paddingHorizontal={15}
+              uppercase={true}
+              borderRadius={28}
+              onPress={this.props.onPress}
+            >          
+              <Image
+                style={styles.icon}
+                source={require('../../assets/images/icons/ic_non_working.png')}
+                />
+            </MaterialButton>
+          </View>
+        )}
       </View>
     );
   }
@@ -98,8 +100,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   cellBody:{
-    padding: 15,
-  },  
+    paddingHorizontal: 25,
+    paddingVertical: 25,
+  }, 
+  flatList:{
+    height: '100%'
+  },
+  centerEmptySet: { 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100%'
+  }, 
   containerButton:{
     marginTop: 10,
     marginHorizontal: 15
@@ -117,5 +128,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
+  },
+  pillContainer:{
+    position: 'absolute',
+    right: 0,
+    top: 0,
   }
 });

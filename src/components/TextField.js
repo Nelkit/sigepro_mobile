@@ -16,7 +16,7 @@ export default class TextField extends Component {
   }
 
   render() {
-    const {placeholder, value, secureTextEntry, keyboardType} = this.props;
+    const {placeholder, value, secureTextEntry, keyboardType, onChangeText, returnKeyType, onKeyPress} = this.props;
 
     return (
       <TextInput
@@ -27,7 +27,9 @@ export default class TextField extends Component {
         autoCapitalize={'none'}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
-        onChangeText={this.props.onChangeText}
+        onChangeText={onChangeText}
+        returnKeyType={returnKeyType}
+        onKeyPress={onKeyPress}
       />
     );
   }

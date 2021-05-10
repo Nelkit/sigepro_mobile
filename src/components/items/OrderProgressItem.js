@@ -4,10 +4,10 @@ import CardLayout from '../CardLayout'
 import Divider from '../Divider'
 import TextFont from '../TextFont'
 import PropTypes from 'prop-types'
+import StatusPill from '../StatusPill'
 
 const VehicleIcon = ({ vehicle_name }) => {
   var vehicle_name = vehicle_name.toLowerCase()
-  console.log("CONSTAINST", vehicle_name)
   if (vehicle_name.includes("volqueta")){
     return (
       <Image style={styles.icon} source={require('../../assets/images/machineries/ic_dump.png')}/> 
@@ -31,10 +31,13 @@ export default class OrderProgressItem extends Component {
   }
 
   render() {
-    const {vehicle_name, vehicle_code, vehicle_driver_name} = this.props;
+    const {vehicle_name, vehicle_code, vehicle_driver_name, is_uploaded} = this.props;
 
     return (
       <CardLayout>
+        <View style={styles.pillContainer} >
+          <StatusPill isUploaded={is_uploaded} />
+        </View>
         <View style={styles.cardBody}>
           <VehicleIcon vehicle_name={vehicle_name} />
           <View>
@@ -61,7 +64,7 @@ export default class OrderProgressItem extends Component {
 const styles = StyleSheet.create({
   cardBody: {
     paddingHorizontal: 15,
-    paddingVertical: 20,
+    paddingVertical: 30,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -75,5 +78,10 @@ const styles = StyleSheet.create({
   iconArrow: {
     width: 15,
     height: 20,
+  },
+  pillContainer:{
+    position: 'absolute',
+    right: 0,
+    top: 0,
   }
 });

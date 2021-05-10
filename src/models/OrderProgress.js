@@ -3,7 +3,6 @@ export const OrderProgress = {
   primaryKey: 'id',
   properties: {
     id: 'int',
-    remoteId: { type: 'int', default: 0 },
     project: 'int',
     vehicle: 'int',
     vehicle_code: 'string',
@@ -15,6 +14,6 @@ export const OrderProgress = {
     fuel_controls: 'FuelControl[]',
     non_working_hours: 'NonWorkingHours[]',
     months: 'Month[]',
-    isUploaded: { type: 'bool', default: true },
+    is_uploaded: { type: 'bool', default: true },
   },
 };

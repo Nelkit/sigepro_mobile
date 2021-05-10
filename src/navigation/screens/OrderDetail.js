@@ -34,7 +34,7 @@ const ProgressTab = ({ order_progress, params, navigate, didAddOrderProgress }) 
   const {id, project, status } = params;
 
   return (
-    <View>
+    <View style={styles.progressTabContainer}>
       <View style={styles.headerContainer}>
         <View style={{flex:2}}>
           <TextFont fontSize={20} fontWeight={'bold'}>Avance por maquinaria </TextFont>
@@ -54,29 +54,30 @@ const ProgressTab = ({ order_progress, params, navigate, didAddOrderProgress }) 
         )}
         </View>
       </View>
-      {order_progress.length === 0 ? (
-        <EmptyBox title={'Todavia no se ha registrado ningún avance.'} type={'excavator'} />
-      ):(
-        <FlatList
-          style={styles.flatlist}
-          data={order_progress}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({index, item}) => {
-            return (
-              <TouchableHighlight
-                style={styles.boxSelect}
-                underlayColor="transparent"
-                onPress={() => navigate('OrderProgress', item)}>
-                  <OrderProgressItem 
-                    vehicle_name = {item.vehicle_name}
-                    vehicle_code = {item.vehicle_code}
-                    vehicle_driver_name = {item.vehicle_driver_name}
-                  />
-              </TouchableHighlight>
-            );
-          }}
-        />
-      )}
+      <FlatList
+        style={styles.flatlist}
+        data={order_progress}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={order_progress.length === 0 && styles.centerEmptySet}
+        ListEmptyComponent={<EmptyBox title={'Todavia no se ha registrado ningún avance.'} type={'excavator'} />}
+        renderItem={({index, item}) => {
+          item.order_status = status
+          
+          return (
+            <TouchableHighlight
+              style={styles.boxSelect}
+              underlayColor="transparent"
+              onPress={() => navigate('OrderProgress', item)}>
+                <OrderProgressItem 
+                  vehicle_name = {item.vehicle_name}
+                  vehicle_code = {item.vehicle_code}
+                  vehicle_driver_name = {item.vehicle_driver_name}
+                  is_uploaded = {item.is_uploaded}
+                />
+            </TouchableHighlight>
+          );
+        }}
+      />
     </View>
   )
 }
@@ -229,9 +230,6 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.background,
   },
-  scrollView: {
-    height: '100%',
-  },
   boxHeader: {
     backgroundColor: Colors.white,
     paddingHorizontal: 20,
@@ -256,6 +254,11 @@ const styles = StyleSheet.create({
   flatlist: {
     paddingBottom: 15,
   },
+  centerEmptySet: { 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100%'
+  }, 
   cardbody:{
     padding: 20,
   },
@@ -278,6 +281,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     height: 2,
     width: "100%"
+  },
+  progressTabContainer:{
+    height: '100%'
   }
 });
 

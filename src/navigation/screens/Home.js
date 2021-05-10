@@ -23,7 +23,7 @@ class Home extends React.Component {
     index: 0,
     routes: [
       {key: 'first', title: 'Asignadas'},
-      {key: 'second', title: 'En Proceso'},
+      {key: 'second', title: 'En Curso'},
       {key: 'third', title: 'Terminadas'},
     ],
   };

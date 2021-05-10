@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
-class EmptyBox extends React.Component {
+class CardLayout extends React.Component {
   render() {
     return <View style={styles.card}>{this.props.children}</View>;
   }
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmptyBox;
+export default CardLayout;

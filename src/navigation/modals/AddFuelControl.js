@@ -7,6 +7,7 @@ import Colors from '../../core/colors';
 import Helpers from '../../core/helpers';
 import TextField from '../../components/TextField';
 import MaterialButton from '../../components/MaterialButton';
+import ErrorMessage from '../../components/ErrorMessage';
 import ModalLayout from '../../components/ModalLayout';
 import TextFont from '../../components/TextFont';
 import { dbPath } from '../../core/constants';
@@ -23,6 +24,7 @@ class AddFuelControl extends React.Component {
       quantity: undefined,
       price: undefined,
       hourmeter: undefined,
+      errorMessage: "",
     };
 
     realm = new Realm({path: dbPath});
@@ -31,6 +33,16 @@ class AddFuelControl extends React.Component {
   saveNewFuelControl = () => {
     const { params } = this.props.route
     const { quantity, price, hourmeter} = this.state;
+
+    if (quantity == undefined || isNaN(parseInt(quantity)) ){
+      this.setState({errorMessage: "Asegurese que ingreso la cantidad"})
+      return 
+    }
+
+    if (price == undefined || isNaN(parseInt(price)) ){
+      this.setState({errorMessage: "Asegurese que ingreso el precio"})
+      return 
+    }
 
     var nextID = Helpers.nextID(FuelControl.name)
     const orderProgress = realm.objectForPrimaryKey(OrderProgress.name, params.id);
@@ -48,7 +60,7 @@ class AddFuelControl extends React.Component {
       year: year,
       quantity: parseInt(quantity),
       price: price,
-      isUploaded: false,
+      is_uploaded: false,
     }
 
     if (orderProgress){
@@ -65,12 +77,13 @@ class AddFuelControl extends React.Component {
 
   render() {
     const { params } = this.props.route
+    const { errorMessage } = this.state
     console.log(params)
 
     return (
       <ModalLayout title={'Registar Consumo de Combustible'} handleCloseModal={()=>this.props.navigation.goBack()}>
         <View>
-          <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Cantidad cargada</TextFont>
+          <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Cantidad cargada (gal)</TextFont>
           <TextField
             onChangeText={quantity => this.setState({quantity})}
             value={this.state.quantity}
@@ -79,7 +92,7 @@ class AddFuelControl extends React.Component {
           />
         </View>
         <View>
-          <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Precio del combustible</TextFont>
+          <TextFont fontSize={16} fontWeight={'bold'} paddingTop={20} paddingBottom={5}>Precio del combustible (L)</TextFont>
           <TextField
             onChangeText={price => this.setState({price})}
             value={this.state.price}
@@ -95,6 +108,11 @@ class AddFuelControl extends React.Component {
             keyboardType={'numeric'}
             placeholder="Ingrese el horometro de la maquinaria"
           />
+        </View>
+        <View>
+          {errorMessage.length > 0 &&(
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+          )}
         </View>
         <View style={{paddingTop: 20}}>
           <MaterialButton

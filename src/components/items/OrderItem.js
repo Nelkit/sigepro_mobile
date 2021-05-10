@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
 import CardLayout from '../CardLayout'
 import Pill from '../Pill'
+import StatusPill from '../StatusPill'
 import MaterialButton from '../MaterialButton'
 import Divider from '../Divider'
 import TextFont from '../TextFont'
@@ -15,41 +16,51 @@ export default class OrderItem extends Component {
   }
 
   static propTypes = {
-    button_title: PropTypes.string,
-    project_name: PropTypes.string,
-    order_number: PropTypes.string,
-    distances_by_work: PropTypes.object,
-    hours_by_vehicle: PropTypes.object,
+    id: PropTypes.number,
+    buttonTitle: PropTypes.string,
+    didPressButton: PropTypes.func,
+    projectName: PropTypes.string,
+    orderNumber: PropTypes.string,
+    distancesByWork: PropTypes.object,
+    hoursByVehicle: PropTypes.object,
     date: PropTypes.instanceOf(Date),
+    isUploaded: PropTypes.bool,
   }
 
   static defaultProps = {
-    button_title: undefined,
-    project_name: '',
-    order_number: '',
-    distances_by_work: [],
-    hours_by_vehicle: []
+    buttonTitle: undefined,
+    projectName: '',
+    orderNumber: '',
+    distancesByWork: [],
+    hoursByVehicle: [],
   }
 
   render() {
-    const {button_title, project_name, order_number, distances_by_work, hours_by_vehicle, date} = this.props;
+    const {id, buttonTitle, didPressButton, projectName, orderNumber, distancesByWork, hoursByVehicle, isUploaded, date} = this.props;
 
     return (
       <CardLayout>
+        <View style={styles.pillContainer} >
+          <StatusPill isUploaded={isUploaded} />
+        </View>
         <View style={styles.cardbody}>
+          {projectName.length > 0 && (
+            <View>
+              <TextFont fontSize={18}>
+                <TextFont fontWeight={'bold'}>Proyecto: </TextFont>{projectName}
+              </TextFont>
+              <Divider/>
+            </View>
+          )}
           <TextFont fontSize={18}>
-            <TextFont fontWeight={'bold'}>Proyecto: </TextFont>{project_name}
-          </TextFont>
-          <Divider/>
-          <TextFont fontSize={18}>
-            <TextFont fontWeight={'bold'}>Orden: </TextFont>#{order_number}
+            <TextFont fontWeight={'bold'}>Orden: </TextFont>#{orderNumber}
           </TextFont>
           <Divider/>
           <TextFont fontSize={18} fontWeight={'bold'}>Kilometros por tramo: </TextFont>
           <FlatList
               style={styles.flatlist}
               horizontal
-              data={distances_by_work}
+              data={distancesByWork}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({index, item}) => {
                 return (
@@ -60,7 +71,7 @@ export default class OrderItem extends Component {
           <TextFont fontSize={18} fontWeight={'bold'}>Horas por Maquinaria: </TextFont>
           <FlatList
             style={styles.flatlist}
-            data={hours_by_vehicle}
+            data={hoursByVehicle}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({index, item}) => {
               return (
@@ -77,15 +88,16 @@ export default class OrderItem extends Component {
               />
               <Text style={styles.datetext}>{Helpers.getDateFromNow(date)}</Text>
             </View>
-            {button_title.length > 0 &&(
+            {buttonTitle.length > 0 &&(
               <MaterialButton
-                title={button_title}
+                title={buttonTitle}
                 backgroundColor={Colors.primaryColor}
                 color={Colors.white}
                 height={35}
                 borderRadius={17.5}
                 paddingHorizontal={15}
                 uppercase={false}
+                onPress={()=> didPressButton(id)}
               />
             )}
           </View>
@@ -98,7 +110,8 @@ export default class OrderItem extends Component {
 const styles = StyleSheet.create({
   cardbody: {
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingBottom: 15,
+    paddingTop: 30,
     borderRadius: 25,
   },
   datecontainer:{
@@ -125,5 +138,10 @@ const styles = StyleSheet.create({
   flatlist: {
     marginTop: 5,
     marginBottom: 10,
+  },
+  pillContainer:{
+    position: 'absolute',
+    right: 0,
+    top: 0,
   }
 });

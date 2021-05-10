@@ -72,5 +72,23 @@ export default {
   },
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  },
+  groupBy(xs, key) {
+    
+    return xs.reduce(function (rv, x) {
+        let v = key instanceof Function ? key(x) : x[key];
+        let el = rv.find((r) => r && r.title === v);
+        if (el) {
+            el.data.push(x);
+        }
+        else {
+            rv.push({
+                title: v,
+                data: [x]
+            });
+        }
+        return rv;
+    }, []);
   }
+
 };

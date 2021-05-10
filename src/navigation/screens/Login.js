@@ -13,7 +13,10 @@ import Colors from '../../core/colors';
 import Helpers from '../../core/helpers';
 import TextField from '../../components/TextField';
 import MaterialButton from '../../components/MaterialButton';
-import requests from '../../services/requests';
+import ErrorMessage from '../../components/ErrorMessage';
+import requests from '../../services/requests'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import TextFont from '../../components/TextFont';
 
 class Login extends React.Component {
   constructor(props) {
@@ -21,6 +24,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
+      errorMessage: '',
       errorLogin: false,
       isLoading: false,
       disabled: false,
@@ -44,16 +48,44 @@ class Login extends React.Component {
     login.then(response => {
       Helpers.storeData('token',response.access_token)
       push('Root');
+
+      this.setState({isLoading: false});
+      this.setState({disabled: false});
     }).catch(error => {
       this.setState({errorLogin: true});
       console.log("RESPUESTA FALLIDA", error)
+
+      this.setState({errorMessage: error})
+      this.setState({isLoading: false});
+      this.setState({disabled: false});
     })
 
-    this.setState({isLoading: false});
-    this.setState({disabled: false});
+    handleKeyDown = (event) => {
+      if(event.nativeEvent.key == "Enter"){
+          dismissKeyboard();
+      }
+    }
+
   }
 
   render() {
+    const {message} = this.state.errorMessage;
+    var errorMessage = "";
+    if (message){
+      var messageJson = JSON.parse(message)
+      if (messageJson.email){
+        errorMessage = `Email: ${messageJson.email[0]}`
+      }
+      
+      if (messageJson.password){
+        errorMessage = `Contraseña: ${messageJson.password[0]}`
+      }
+
+      if (messageJson.non_field_errors){
+        errorMessage = `${messageJson.non_field_errors[0]}`
+      }
+    }
+
     return (
       <>
         <StatusBar
@@ -62,9 +94,9 @@ class Login extends React.Component {
         />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.wrapper}>
-            <ScrollView
-              contentInsetAdjustmentBehavior="automatic"
-              style={styles.scrollView}>
+            <KeyboardAwareScrollView
+                contentInsetAdjustmentBehavior="automatic"
+                style={styles.scrollView}>
               <View style={styles.container}>
 
                 <Image
@@ -76,40 +108,42 @@ class Login extends React.Component {
                   <TextField
                     onChangeText={username => this.setState({username})}
                     value={this.state.username}
-                    placeholder="Ingrese Usuario"
+                    placeholder="Ingrese correo electrónico"
                   />
                 </View>
                 <View style={styles.formRow}>
                   <TextField
                     onChangeText={password => this.setState({password})}
                     value={this.state.password}
-                    placeholder="Ingrese Contraseña"
+                    placeholder="Ingrese contraseña"
                     secureTextEntry={true}
+                    returnKeyType="done"
+                    onKeyPress={this.handleKeyDown}
                   />
                 </View>
-                <MaterialButton
-                  title="Entrar"
-                  disabledText="Espere un Momento..."
-                  borderRadius={25}
-                  uppercase={true}
-                  disabled={this.state.disabled}
-                  backgroundColor={Colors.primaryColor}
-                  color={Colors.primaryDarkText}
-                  onPress={this.doLogin}
-                />
+                <View style={styles.containerButton}>
+                  <MaterialButton
+                    title="Entrar"
+                    disabledText="Espere un Momento..."
+                    borderRadius={25}
+                    uppercase={true}
+                    disabled={this.state.disabled}
+                    backgroundColor={Colors.primaryColor}
+                    color={Colors.primaryDarkText}
+                    onPress={this.doLogin}
+                  />
+                </View>
                 {this.state.errorLogin && (
-                  <Text style={styles.messageError}>
-                    Ocurrio un error al hacer login, intente de nuevo.
-                  </Text>
+                  <ErrorMessage>{errorMessage}</ErrorMessage>
                 )}
 
                 {this.state.isLoading && (
                   <View style={styles.horizontal}>
-                    <ActivityIndicator size="small" color="#0000ff" />
+                    <ActivityIndicator size="small" color={Colors.primaryColor} />
                   </View>
                 )}
               </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
           </View>
         </SafeAreaView>
       </>
@@ -132,9 +166,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   logo: {
-    width: 133,
-    height: 131,
-    marginBottom: 20,
+    width: 140,
+    height: 152,
+    marginVertical: 40,
   },
   safeArea: {
     backgroundColor: Colors.background,
@@ -143,17 +177,14 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 10,
   },
-  messageError: {
-    marginTop: 20,
-    fontSize: 16,
-    color: 'red',
-    textAlign: 'center',
-  },
   horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
   },
+  containerButton:{
+    marginTop: 20,
+  }
 });
 
 export default Login;

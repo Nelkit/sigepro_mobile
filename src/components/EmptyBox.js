@@ -43,9 +43,6 @@ const styles = StyleSheet.create({
   emptyBox:{
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '60%',
     paddingHorizontal: 15,
   },
   emptyBody:{

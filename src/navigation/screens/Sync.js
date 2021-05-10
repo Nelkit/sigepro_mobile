@@ -54,7 +54,7 @@ class Sync extends React.Component {
         Month,
         VehicleDriver
       ],
-      schemaVersion: 2,
+      schemaVersion: 6,
       migration: function(oldRealm, newRealm) {
 
       },
@@ -106,6 +106,21 @@ class Sync extends React.Component {
     })
   }
 
+  uploadWorkOrderChanges = (workOrderChangesToUpload) => {
+    workOrderChangesToUpload.map((item)=>{
+      var request = requests.updateWorkOrderStatus(item.id, item.status)
+      request.then(work_order => {
+        realm.write(() => {
+          item.has_changes = false
+        });
+
+        this.updateUploadedStatus(5)
+      }).catch(error => {
+        console.log("ERROR AL GUARDAR WORK ORDER STATUS", error)
+      })
+    })
+  }
+
   uploadOrderProgress = () => {
     const { orderProgressToUpload } = this.state;
 
@@ -113,12 +128,12 @@ class Sync extends React.Component {
       var request = requests.uploadOrderProgress(item.project,item.vehicle,item.vehicle_driver, item.work_order)
       request.then(order_progress => {
         realm.write(() => {
-          item.isUploaded = true
-          item.remoteId = order_progress.id
-          
+          // le cambio el id de la relacion por el id que me devuelve el server
           item.time_controls.forEach(time_control => {time_control.project_progress = order_progress.id})
           item.fuel_controls.forEach(fuel_control => {fuel_control.project_progress = order_progress.id})
           item.non_working_hours.forEach(non_working_hour => {non_working_hour.project_progress = order_progress.id})
+
+          realm.delete(item)
         });
 
         this.updateUploadedStatus(1)
@@ -139,8 +154,7 @@ class Sync extends React.Component {
       var request = requests.uploadTimeControls(item.project_progress, item.day, item.month, item.year, item.initial_hourmeter, item.hours, item.other_works, item.final_hourmeter)
       request.then(time_control => {
         realm.write(() => {
-          item.isUploaded = true
-          item.remoteId = time_control.id
+          realm.delete(item)
         });
 
         this.updateUploadedStatus(2)
@@ -155,8 +169,7 @@ class Sync extends React.Component {
       var request = requests.uploadFuelControls(item.project_progress, item.day, item.month, item.year, item.quantity, item.price)
       request.then(fuel_control => {
         realm.write(() => {
-          item.isUploaded = true
-          item.remoteId = fuel_control.id
+          realm.delete(item)
         });
 
         this.updateUploadedStatus(3)
@@ -171,8 +184,7 @@ class Sync extends React.Component {
       var request = requests.uploadNonWorkingHours(item.project_progress, item.day, item.month, item.year, item.reason, item.observations, item.hours, )
       request.then(non_working_hour => {
         realm.write(() => {
-          item.isUploaded = true
-          item.remoteId = non_working_hour.id
+          realm.delete(item)
         });
 
         this.updateUploadedStatus(4)
@@ -183,21 +195,21 @@ class Sync extends React.Component {
   }
 
   getAndUploadControls = () => {
-    let orderProgressToUpload = realm.objects(OrderProgress.name).filtered('isUploaded=false');
+    let orderProgressToUpload = realm.objects(OrderProgress.name).filtered('is_uploaded=false');
 
     // si es igual a cero ya se subieron todos los OrderProgress
     if (orderProgressToUpload.length == 0){
       let uploadQueue = [...this.state.uploadQueue];
     
-      let timeControlsToUpload = realm.objects(TimeControl.name).filtered('isUploaded=false');
+      let timeControlsToUpload = realm.objects(TimeControl.name).filtered('is_uploaded=false');
       uploadQueue.push({id: 2, 'title': 'Control de horas', 'total': timeControlsToUpload.length, 'current': 0});
       this.uploadTimeControls(timeControlsToUpload)
 
-      let fuelControlsToUpload = realm.objects(FuelControl.name).filtered('isUploaded=false');
+      let fuelControlsToUpload = realm.objects(FuelControl.name).filtered('is_uploaded=false');
       uploadQueue.push({id: 3, 'title': 'Control de combustible', 'total': fuelControlsToUpload.length, 'current': 0});
       this.uploadFuelControls(fuelControlsToUpload)
 
-      let nonWorkingHoursToUpload = realm.objects(NonWorkingHours.name).filtered('isUploaded=false');
+      let nonWorkingHoursToUpload = realm.objects(NonWorkingHours.name).filtered('is_uploaded=false');
       uploadQueue.push({id: 4, 'title': 'Horas Inhabiles', 'total': nonWorkingHoursToUpload.length, 'current': 0});
       this.uploadNonWorkingHours(nonWorkingHoursToUpload)
 
@@ -243,22 +255,29 @@ class Sync extends React.Component {
     let uploadQueue = [...this.state.uploadQueue];
 
     //Agregando OrderProgressQueue
-    let orderProgressToUpload = realm.objects(OrderProgress.name).filtered('isUploaded=false');
+    let orderProgressToUpload = realm.objects(OrderProgress.name).filtered('is_uploaded=false');
 
     this.setState({orderProgressToUpload}, successCallback)
     uploadQueue.push({id: 1, 'title': 'Avance de ordenes', 'total': orderProgressToUpload.length, 'current': 0});
+
+    //Agregando WorkOrderChanges
+    let workOrderChangesToUpload = realm.objects(WorkOrder.name).filtered('has_changes=true');
+
+    this.uploadWorkOrderChanges(workOrderChangesToUpload)
+    uploadQueue.push({id: 5, 'title': 'Estados de ordenes', 'total': workOrderChangesToUpload.length, 'current': 0});
 
     // Set state
     this.setState({uploadQueue});
   }
 
   checkIfAllDataUploaded = () => {
-    let orderProgressNotUploaded = realm.objects(OrderProgress.name).filtered('isUploaded=false');
-    let timeControlsNotUploaded = realm.objects(TimeControl.name).filtered('isUploaded=false');
-    let fuelControlsNotUploaded = realm.objects(FuelControl.name).filtered('isUploaded=false');
-    let nonWorkingHoursNotUploaded = realm.objects(NonWorkingHours.name).filtered('isUploaded=false');
+    let orderProgressNotUploaded = realm.objects(OrderProgress.name).filtered('is_uploaded=false');
+    let timeControlsNotUploaded = realm.objects(TimeControl.name).filtered('is_uploaded=false');
+    let fuelControlsNotUploaded = realm.objects(FuelControl.name).filtered('is_uploaded=false');
+    let nonWorkingHoursNotUploaded = realm.objects(NonWorkingHours.name).filtered('is_uploaded=false');
+    let workOrderChangesNotUpload = realm.objects(WorkOrder.name).filtered('has_changes=true');
 
-    return orderProgressNotUploaded.length == 0 && timeControlsNotUploaded.length == 0 && fuelControlsNotUploaded.length == 0 && nonWorkingHoursNotUploaded.length == 0
+    return orderProgressNotUploaded.length == 0 && timeControlsNotUploaded.length == 0 && fuelControlsNotUploaded.length == 0 && nonWorkingHoursNotUploaded.length == 0 && workOrderChangesNotUpload.length == 0;
   }
 
   componentDidMount = () => {

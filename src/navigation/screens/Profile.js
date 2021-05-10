@@ -29,10 +29,6 @@ class Profile extends React.Component {
     realm = new Realm({path: dbPath});
   }
 
-  componentDidMount() {
-
-  }
-
   signOutAction = async () => {
     await AsyncStorage.clear();
     realm.write(() => {

@@ -73,7 +73,7 @@ class AddOrderProgress extends React.Component {
       fuel_controls: [],
       non_working_hours: [],
       months: [],
-      isUploaded: false,
+      is_uploaded: false,
     };
 
     if (workOrder && selectedVehicle.value && selectedVehicleDriver.value){

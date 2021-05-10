@@ -15,8 +15,6 @@ import {TabView, TabBar} from 'react-native-tab-view';
 import Colors from '../../core/colors';
 import TextFont from '../../components/TextFont';
 import Divider from '../../components/Divider';
-import EmptyBox from '../../components/EmptyBox';
-import MaterialButton from '../../components/MaterialButton';
 import TimeControlItem from '../../components/items/TimeControlItem'
 import FuelControlItem from '../../components/items/FuelControlItem'
 import NonWorkingHourItem from '../../components/items/NonWorkingHourItem'
@@ -75,7 +73,7 @@ class OrderProgress extends React.Component {
     const { params } = this.props.route
     const { time_controls, fuel_controls, non_working_hours } = this.state;
     console.log(params)
-    const {id, vehicle_name, vehicle_driver_name } = params;
+    const {id, vehicle_name, vehicle_driver_name, order_status } = params;
 
     return (
       <>
@@ -102,6 +100,7 @@ class OrderProgress extends React.Component {
                 case 'first':
                   return (
                     <TimeControlItem 
+                      order_status={order_status}
                       time_controls={time_controls} 
                       onPress={()=>{navigate('AddTimeControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
                     />
@@ -109,6 +108,7 @@ class OrderProgress extends React.Component {
                 case 'second':
                   return( 
                     <FuelControlItem 
+                      order_status={order_status}
                       fuel_controls={fuel_controls}
                       onPress={()=>{navigate('AddFuelControl', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
                     />
@@ -116,6 +116,7 @@ class OrderProgress extends React.Component {
                 case 'third':
                   return (
                     <NonWorkingHourItem 
+                      order_status={order_status}
                       non_working_hours={non_working_hours} 
                       onPress={()=>{navigate('AddNonWorkingHours', {id: id, didAddProgressHandler: this.didAddProgressHandler})}}
                     />
