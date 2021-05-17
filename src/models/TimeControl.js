@@ -3,7 +3,7 @@ export const TimeControl = {
   primaryKey: 'id',
   properties: {
     id: 'int',
-    project_progress: 'int',
+    order_progress: 'int',
     day: 'int',
     month: 'string',
     year: 'string',

@@ -54,7 +54,7 @@ class Sync extends React.Component {
         Month,
         VehicleDriver
       ],
-      schemaVersion: 6,
+      schemaVersion: 7,
       migration: function(oldRealm, newRealm) {
 
       },
@@ -129,9 +129,9 @@ class Sync extends React.Component {
       request.then(order_progress => {
         realm.write(() => {
           // le cambio el id de la relacion por el id que me devuelve el server
-          item.time_controls.forEach(time_control => {time_control.project_progress = order_progress.id})
-          item.fuel_controls.forEach(fuel_control => {fuel_control.project_progress = order_progress.id})
-          item.non_working_hours.forEach(non_working_hour => {non_working_hour.project_progress = order_progress.id})
+          item.time_controls.forEach(time_control => {time_control.order_progress = order_progress.id})
+          item.fuel_controls.forEach(fuel_control => {fuel_control.order_progress = order_progress.id})
+          item.non_working_hours.forEach(non_working_hour => {non_working_hour.order_progress = order_progress.id})
 
           realm.delete(item)
         });
@@ -151,7 +151,7 @@ class Sync extends React.Component {
 
   uploadTimeControls = (timeControlsToUpload) => {
     timeControlsToUpload.map((item)=>{
-      var request = requests.uploadTimeControls(item.project_progress, item.day, item.month, item.year, item.initial_hourmeter, item.hours, item.other_works, item.final_hourmeter)
+      var request = requests.uploadTimeControls(item.order_progress, item.day, item.month, item.year, item.initial_hourmeter, item.hours, item.other_works, item.final_hourmeter)
       request.then(time_control => {
         realm.write(() => {
           realm.delete(item)
@@ -166,7 +166,7 @@ class Sync extends React.Component {
 
   uploadFuelControls = (fuelControlsToUpload) => {
     fuelControlsToUpload.map((item)=>{
-      var request = requests.uploadFuelControls(item.project_progress, item.day, item.month, item.year, item.quantity, item.price)
+      var request = requests.uploadFuelControls(item.order_progress, item.day, item.month, item.year, item.quantity, item.price)
       request.then(fuel_control => {
         realm.write(() => {
           realm.delete(item)
@@ -181,7 +181,7 @@ class Sync extends React.Component {
 
   uploadNonWorkingHours = (nonWorkingHoursToUpload) => {
     nonWorkingHoursToUpload.map((item)=>{
-      var request = requests.uploadNonWorkingHours(item.project_progress, item.day, item.month, item.year, item.reason, item.observations, item.hours, )
+      var request = requests.uploadNonWorkingHours(item.order_progress, item.day, item.month, item.year, item.reason, item.observations, item.hours, )
       request.then(non_working_hour => {
         realm.write(() => {
           realm.delete(item)

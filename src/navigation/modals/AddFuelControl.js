@@ -54,7 +54,7 @@ class AddFuelControl extends React.Component {
 
     var newFuelControl = {
       id: nextID,
-      project_progress: params.id,
+      order_progress: params.id,
       day: day,
       month: month,
       year: year,

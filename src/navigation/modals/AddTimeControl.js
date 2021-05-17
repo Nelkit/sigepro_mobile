@@ -60,7 +60,7 @@ class AddTimeControl extends React.Component {
 
     var newTimeControl = {
       id: nextID,
-      project_progress: params.id,
+      order_progress: params.id,
       day: day,
       month: month,
       year: year,

@@ -123,14 +123,14 @@ export default {
     };
 
     try {
-      var response = await fetchJSON(`${urlApi}/api/mobile/project_progress/`, options)
+      var response = await fetchJSON(`${urlApi}/api/mobile/order_progress/`, options)
       return response
     } catch (error) {
       throw error
     }
   },
   async uploadTimeControls(
-    project_progress,
+    order_progress,
     day,
     month,
     year,
@@ -141,7 +141,7 @@ export default {
   ) {
     const token = await AsyncStorage.getItem('token');
     var formData = new FormData();
-    formData.append('project_progress', project_progress);
+    formData.append('order_progress', order_progress);
     formData.append('day', day);
     formData.append('month', month);
     formData.append('year', year);
@@ -169,7 +169,7 @@ export default {
     }
   },
   async uploadFuelControls(
-    project_progress,
+    order_progress,
     day,
     month,
     year,
@@ -178,7 +178,7 @@ export default {
   ) {
     const token = await AsyncStorage.getItem('token');
     var formData = new FormData();
-    formData.append('project_progress', project_progress);
+    formData.append('order_progress', order_progress);
     formData.append('day', day);
     formData.append('month', month);
     formData.append('year', year);
@@ -204,7 +204,7 @@ export default {
     }
   },
   async uploadNonWorkingHours(
-    project_progress,
+    order_progress,
     day,
     month,
     year,
@@ -214,7 +214,7 @@ export default {
   ) {
     const token = await AsyncStorage.getItem('token');
     var formData = new FormData();
-    formData.append('project_progress', project_progress);
+    formData.append('order_progress', order_progress);
     formData.append('day', day);
     formData.append('month', month);
     formData.append('year', year);

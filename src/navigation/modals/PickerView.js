@@ -38,23 +38,38 @@ class PickerView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    };
+      searchWord: '',
+      filterList: [],
 
+    };
+  }
+
+  componentDidMount() {
+    const { params } = this.props.route
+    const { list } = params;
+
+    this.setState({filterList: list})
   }
 
   render() {
     const { params } = this.props.route
     const { title, list, didSelected } = params;
-    console.log(params)
+    const { filterList } = this.state;
 
     return (
       <ModalLayout title={title} handleCloseModal={()=>this.props.navigation.goBack()}>
-        <TextField 
+        {/* <TextField 
           placeholder={'Buscar en la lista'}
-          value={''}
-        />
+          value={this.state.searchWord}
+          onChangeText={(searchWord)=>{
+            this.setState({searchWord})
+
+            var list = Helpers.search(filterList, searchWord)
+            this.setState({filterList: [...list]})
+          }}
+        /> */}
         <View style={styles.flatList}>
-          {list.map((item, index) => {
+          {filterList.map((item, index) => {
             return (
               <TouchableOpacity
               key={index}

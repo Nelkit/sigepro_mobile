@@ -89,6 +89,19 @@ export default {
         }
         return rv;
     }, []);
+  },
+  search(array, toSearch){
+    var results = [];
+    
+    for(var i=0; i<array.length; i++) {
+      for(var key in array[i]) {
+        if(array[i]['label'].toLowerCase().indexOf(toSearch)!=-1) {
+          results.push(array[i]);
+        }
+      }
+    }
+
+    return results;
   }
 
 };

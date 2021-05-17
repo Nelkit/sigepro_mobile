@@ -45,13 +45,13 @@ class OrderProgress extends React.Component {
     const { params } = this.props.route
     const { id } = params;
 
-    let timeControls = realm.objects(TimeControl.name).filtered(`project_progress = ${id}`);
+    let timeControls = realm.objects(TimeControl.name).filtered(`order_progress = ${id}`);
     this.setState({time_controls: timeControls})
 
-    let fuelControls = realm.objects(FuelControl.name).filtered(`project_progress = ${id}`);
+    let fuelControls = realm.objects(FuelControl.name).filtered(`order_progress = ${id}`);
     this.setState({fuel_controls: fuelControls})
 
-    let nonWorkingHours = realm.objects(NonWorkingHours.name).filtered(`project_progress = ${id}`);
+    let nonWorkingHours = realm.objects(NonWorkingHours.name).filtered(`order_progress = ${id}`);
     this.setState({non_working_hours: nonWorkingHours})
   }
 

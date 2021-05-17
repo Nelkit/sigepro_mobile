@@ -68,7 +68,7 @@ class AddNonWorkingHours extends React.Component {
 
     var newNonWorkingHours = {
       id: nextID,
-      project_progress: params.id,
+      order_progress: params.id,
       day: day,
       month: month,
       year: year,
